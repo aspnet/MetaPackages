@@ -76,8 +76,13 @@
     </ItemGroup>
 
     <Copy SourceFiles="@(MetaPackageNupkg)" DestinationFolder="$(ArtifactsDir)" />
-    <Exec Command="$(ToolsDir)7za.exe x -y -scsUTF-8 -o@(MetaPackageNupkg->'$(TempDir)%(Filename)') %(MetaPackageNupkg.Identity) > nul" />
+    <UnzipArchive File="$(ArtifactsDir)%(MetaPackageNupkg.FileName)%(MetaPackageNupkg.Extension)" Destination="@(MetaPackageNupkg->'$(TempDir)%(Filename)')" />
     <Copy SourceFiles="@(ManifestFiles)" DestinationFolder="@(MetaPackageNupkg->'$(TempDir)%(Filename)\content\build\')" />
-    <Exec Command="$(ToolsDir)7za.exe a -tzip -mx9 -r -y %(MetaPackageNupkg.FullPath) * > nul" WorkingDirectory="@(MetaPackageNupkg->'$(TempDir)%(Filename)')" />
+
+    <ItemGroup>
+      <ArchiveFiles Include="$(TempDir)%(MetaPackageNupkg.Filename)\**\*" />
+    </ItemGroup>
+
+    <ZipArchive File="%(MetaPackageNupkg.FullPath)" SourceFiles="@(ArchiveFiles)" WorkingDirectory="@(MetaPackageNupkg->'$(TempDir)%(Filename)')" />
   </Target>
 </Project>
