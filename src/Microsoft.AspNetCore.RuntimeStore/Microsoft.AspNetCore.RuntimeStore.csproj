@@ -16,6 +16,6 @@
         <DepsFiles Include="%(FileDefinitions.ResolvedPath)" Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Identity)', '.*?\.HostingStartup\.deps\.json')) "/>
       </ItemGroup>
       
-      <Copy SourceFiles="%(DepsFiles.Identity)" DestinationFolder="$(DepsOutputPath)\Microsoft.NETCore.App\2.0.0\" />
+      <Copy SourceFiles="@(DepsFiles)" DestinationFolder="$(DepsOutputPath)\Microsoft.NETCore.App\2.0.0\" />
   </Target>
 </Project>
