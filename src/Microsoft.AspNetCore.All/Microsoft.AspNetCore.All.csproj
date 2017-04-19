@@ -139,13 +139,7 @@
     <PackageReference Include="Microsoft.Extensions.Primitives" Version="$(AspNetCoreVersion)" PrivateAssets="None" />
     <PackageReference Include="Microsoft.Extensions.WebEncoders" Version="$(AspNetCoreVersion)" PrivateAssets="None" />
     <PackageReference Include="Microsoft.Net.Http.Headers" Version="$(AspNetCoreVersion)" PrivateAssets="None" />
-
-    <PackageReference Include="Microsoft.AspNetCore.AzureAppServices.HostingStartup" Version="$(AspNetCoreVersion)" PrivateAssets="None" Condition="'$(BUILD_PACKAGE_CACHE)' == 'true'" />
-    <PackageReference Include="Microsoft.AspNetCore.AzureAppServicesIntegration" Version="$(AspNetCoreVersion)" PrivateAssets="None" Condition="'$(BUILD_PACKAGE_CACHE)' == 'true'" />
-    <PackageReference Include="Microsoft.AspNetCore.ApplicationInsights.HostingStartup" Version="$(AspNetCoreVersion)" PrivateAssets="None" Condition="'$(BUILD_PACKAGE_CACHE)' == 'true'" />
-    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="$(AspNetCoreVersion)" PrivateAssets="None" Condition="'$(BUILD_PACKAGE_CACHE)' == 'true'" />
   </ItemGroup>
-
   <ItemGroup>
     <Content Include="build\**\*.xml" Package="true" />
     <Content Include="build\**\*.targets" Package="true" />
