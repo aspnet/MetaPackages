@@ -1,5 +1,10 @@
 {
   "version": "1.0.5",
+  "packOptions": {
+    "tags": [
+      "aspnetcore"
+    ]
+  },
   "dependencies": {
     "Microsoft.AspNetCore.Diagnostics": "1.0.2",
     "Microsoft.AspNetCore.Hosting": "1.0.2",
