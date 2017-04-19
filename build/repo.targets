@@ -2,8 +2,8 @@
   <Import Project="common.props" />
 
   <PropertyGroup>
-    <MetaPackagePath>$(RepositoryRoot)src\Microsoft.AspNetCore.PackageStore\</MetaPackagePath>
-    <MetaPackageFile>$(MetaPackagePath)Microsoft.AspNetCore.PackageStore.csproj</MetaPackageFile>
+    <MetaPackagePath>$(RepositoryRoot)src\Microsoft.AspNetCore.RuntimeStore\</MetaPackagePath>
+    <MetaPackageFile>$(MetaPackagePath)Microsoft.AspNetCore.RuntimeStore.csproj</MetaPackageFile>
     <WorkingDirectory>$(MetaPackagePath)bin\work\</WorkingDirectory>
     <OutputPath>$(MetaPackagePath)bin\packageCache\</OutputPath>
     <DepsOutputPath>$(MetaPackagePath)bin\deps\</DepsOutputPath>
