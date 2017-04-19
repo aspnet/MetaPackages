@@ -15,7 +15,7 @@
 
   <Target Name="CollectDeps" DependsOnTargets="Restore;RunResolvePackageDependencies">
       <ItemGroup>
-        <DepsFiles Include="%(FileDefinitions.ResolvedPath)"  Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Identity)', '.*?\.HostingStartup.*?')) "/>
+        <DepsFiles Include="%(FileDefinitions.ResolvedPath)" Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('%(Identity)', '.*?\.HostingStartup\.deps\.json')) "/>
       </ItemGroup>
       
       <Copy SourceFiles="%(DepsFiles.Identity)" DestinationFolder="$(DepsOutputPath)\Microsoft.NETCore.App\2.0.0\" />
