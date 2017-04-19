@@ -2,9 +2,9 @@
   <Import Project="common.props" />
 
   <PropertyGroup>
-    <MetaPackagePath>$(RepositoryRoot)src\Microsoft.AspNetCore.PackageCache\</MetaPackagePath>
-    <MetaPackageFile>$(MetaPackagePath)Microsoft.AspNetCore.PackageCache.csproj</MetaPackageFile>
-    <WorkingDirectory>$(MetaPackagePath)bin\work</WorkingDirectory>
+    <MetaPackagePath>$(RepositoryRoot)src\Microsoft.AspNetCore.PackageStore\</MetaPackagePath>
+    <MetaPackageFile>$(MetaPackagePath)Microsoft.AspNetCore.PackageStore.csproj</MetaPackageFile>
+    <WorkingDirectory>$(MetaPackagePath)bin\work\</WorkingDirectory>
     <OutputPath>$(MetaPackagePath)bin\packageCache\</OutputPath>
     <DepsOutputPath>$(MetaPackagePath)bin\deps\</DepsOutputPath>
     <ArtifactsDir>$(RepositoryRoot)artifacts\</ArtifactsDir>
@@ -37,7 +37,7 @@
 
     <PropertyGroup>
       <OutputZipSufix Condition="'$(OSPlatform)' == 'Windows'">win</OutputZipSufix>
-      <OutputZipSufix Condition="'$(OSPlatform)' == 'Linux'">linuxp</OutputZipSufix>
+      <OutputZipSufix Condition="'$(OSPlatform)' == 'Linux'">linux</OutputZipSufix>
       <OutputZipSufix Condition="'$(OSPlatform)' == 'macOS'">osx</OutputZipSufix>
 
       <OutputZip>$(ArtifactsDir)Build.RuntimeStore.$(OutputZipSufix)-$(VersionSuffix).zip</OutputZip>
