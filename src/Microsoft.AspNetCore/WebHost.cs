@@ -148,7 +148,7 @@ namespace Microsoft.AspNetCore
 
                     if (env.IsDevelopment())
                     {
-                        var appAssembly = Assembly.GetEntryAssembly();
+                        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
                         if (appAssembly != null)
                         {
                             config.AddUserSecrets(appAssembly);
