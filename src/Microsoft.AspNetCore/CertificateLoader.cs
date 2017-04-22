@@ -1,0 +1,146 @@
+// Copyright (c) .NET Foundation. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using Microsoft.Extensions.Configuration;
+
+namespace Microsoft.AspNetCore
+{
+    /// <summary>
+    /// A helper class to load certificates from files and certificate stores based on <seealso cref="IConfiguration"/> data.
+    /// </summary>
+    public static class CertificateLoader
+    {
+        /// <summary>
+        /// Loads one or more certificates from a single source.
+        /// </summary>
+        /// <param name="certificateConfiguration">An <seealso cref="IConfiguration"/> with information about a certificate source.</param>
+        /// <param name="password">The certificate password, in case it's being loaded from a file.</param>
+        /// <returns>The loaded certificates.</returns>
+        public static X509Certificate2 Load(IConfiguration certificateConfiguration, string password = null)
+        {
+            var sourceKind = certificateConfiguration.GetValue<string>("Source");
+
+            CertificateSource certificateSource;
+            switch (sourceKind)
+            {
+                case "File":
+                    certificateSource = new CertificateFileSource(password);
+                    break;
+                case "Store":
+                    certificateSource = new CertificateStoreSource();
+                    break;
+                default:
+                    throw new InvalidOperationException($"Invalid certificate source kind: {sourceKind}");
+            }
+
+            certificateConfiguration.Bind(certificateSource);
+            return certificateSource.Load();
+        }
+
+        /// <summary>
+        /// Loads all certificates specified in an <seealso cref="IConfiguration"/>.
+        /// </summary>
+        /// <param name="configurationRoot">The root <seealso cref="IConfiguration"/>.</param>
+        /// <returns>
+        /// A dictionary mapping certificate names to loaded certificates.
+        /// </returns>
+        public static Dictionary<string, X509Certificate2> LoadAll(IConfiguration configurationRoot)
+        {
+            var certificates = configurationRoot.GetSection("Certificates");
+            var loadedCertificates = new Dictionary<string, X509Certificate2>();
+
+            foreach (var certificateSource in certificates.GetChildren())
+            {
+                var name = certificateSource.Key;
+                loadedCertificates[name] = Load(certificateSource, configurationRoot[$"Certificates:{name}:Password"]);
+            }
+
+            return loadedCertificates;
+        }
+
+        private abstract class CertificateSource
+        {
+            public string Source { get; set; }
+
+            public abstract X509Certificate2 Load();
+        }
+
+        private class CertificateFileSource : CertificateSource
+        {
+            private readonly string _password;
+
+            public CertificateFileSource(string password)
+            {
+                _password = password;
+            }
+
+            public string Path { get; set; }
+
+            public override X509Certificate2 Load()
+            {
+                var certificate = TryLoad(X509KeyStorageFlags.DefaultKeySet, out var error)
+                    ?? TryLoad(X509KeyStorageFlags.UserKeySet, out error)
+    #if NETCOREAPP2_0
+                    ?? TryLoad(X509KeyStorageFlags.EphemeralKeySet, out error)
+    #endif
+                    ;
+
+                if (error != null)
+                {
+                    throw error;
+                }
+
+                return certificate;
+            }
+
+            private X509Certificate2 TryLoad(X509KeyStorageFlags flags, out Exception exception)
+            {
+                try
+                {
+                    var loadedCertificate = new X509Certificate2(Path, _password);
+                    exception = null;
+                    return loadedCertificate;
+                }
+                catch (Exception e)
+                {
+                    exception = e;
+                    return null;
+                }
+            }
+        }
+
+        private class CertificateStoreSource : CertificateSource
+        {
+            public string Subject { get; set; }
+            public string StoreName { get; set; }
+            public string StoreLocation { get; set; }
+
+            public override X509Certificate2 Load()
+            {
+                if (!Enum.TryParse(StoreLocation, true, out StoreLocation storeLocation))
+                {
+                    throw new InvalidOperationException($"Invalid store location: {StoreLocation}");
+                }
+
+                using (var store = new X509Store(StoreName, storeLocation))
+                {
+                    store.Open(OpenFlags.ReadOnly);
+                    var foundCertificate = store.Certificates.Find(X509FindType.FindBySubjectName, Subject, validOnly: false)
+                        .OfType<X509Certificate2>()
+                        .OrderByDescending(certificate => certificate.NotAfter)
+                        .First();
+
+    #if NET46
+                    store.Close();
+    #endif
+
+                    return foundCertificate;
+                }
+            }
+        }
+    }
+}
