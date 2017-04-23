@@ -162,9 +162,9 @@ namespace Microsoft.AspNetCore
                         config.AddCommandLine(args);
                     }
                 })
-                .ConfigureLogging(logging =>
+                .ConfigureLogging((context, logging) =>
                 {
-                    logging.AddConsole();
+                    logging.AddConsole(context.Configuration);
                 })
                 .UseIISIntegration()
                 .ConfigureServices(services =>
