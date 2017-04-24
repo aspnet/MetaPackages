@@ -50,16 +50,10 @@ namespace Microsoft.AspNetCore
         /// </returns>
         public static Dictionary<string, X509Certificate2> LoadAll(IConfiguration configurationRoot)
         {
-            var certificates = configurationRoot.GetSection("Certificates");
-            var loadedCertificates = new Dictionary<string, X509Certificate2>();
-
-            foreach (var certificateSource in certificates.GetChildren())
-            {
-                var name = certificateSource.Key;
-                loadedCertificates[name] = Load(certificateSource, configurationRoot[$"Certificates:{name}:Password"]);
-            }
-
-            return loadedCertificates;
+            return configurationRoot.GetSection("Certificates").GetChildren()
+                .ToDictionary(
+                    certificateSource => certificateSource.Key,
+                    certificateSource => Load(certificateSource, configurationRoot[$"Certificates:{certificateSource.Key}:Password"]));
         }
 
         private abstract class CertificateSource
