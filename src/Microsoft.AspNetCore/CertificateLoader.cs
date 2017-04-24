@@ -95,7 +95,7 @@ namespace Microsoft.AspNetCore
             {
                 try
                 {
-                    var loadedCertificate = new X509Certificate2(Path, _password);
+                    var loadedCertificate = new X509Certificate2(Path, _password, flags);
                     exception = null;
                     return loadedCertificate;
                 }
