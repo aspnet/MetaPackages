@@ -65,8 +65,8 @@ namespace Microsoft.AspNetCore
                 throw new InvalidOperationException($"Invalid IP address: {addressValue}");
             }
 
-            ushort port;
-            if (!ushort.TryParse(portValue, out port))
+            int port;
+            if (!int.TryParse(portValue, out port))
             {
                 throw new InvalidOperationException($"Invalid port: {portValue}");
             }
