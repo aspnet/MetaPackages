@@ -78,7 +78,10 @@ namespace Microsoft.AspNetCore
                 X509Certificate2 endPointCertificate = null;
                 if (certificateName != null)
                 {
-                    endPointCertificate = certificates[certificateName];
+                    if (!certificates.TryGetValue(certificateName, out endPointCertificate))
+                    {
+                        throw new InvalidOperationException($"No certificate named {certificateName} found in configuration");
+                    }
                 }
                 else
                 {
@@ -86,8 +89,7 @@ namespace Microsoft.AspNetCore
 
                     if (certificate.GetChildren().Any())
                     {
-                        var password = _configurationRoot[$"Kestrel:EndPoints:{endPoint.Key}:Certificate:Password"];
-                        endPointCertificate = CertificateLoader.Load(certificate, password);
+                        endPointCertificate = CertificateLoader.Load(certificate, certificate["Password"]);
                     }
                 }
 

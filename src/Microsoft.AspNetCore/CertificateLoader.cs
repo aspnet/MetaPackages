@@ -25,12 +25,12 @@ namespace Microsoft.AspNetCore
             var sourceKind = certificateConfiguration.GetValue<string>("Source");
 
             CertificateSource certificateSource;
-            switch (sourceKind)
+            switch (sourceKind.ToLowerInvariant())
             {
-                case "File":
+                case "file":
                     certificateSource = new CertificateFileSource(password);
                     break;
-                case "Store":
+                case "store":
                     certificateSource = new CertificateStoreSource();
                     break;
                 default:
@@ -53,7 +53,7 @@ namespace Microsoft.AspNetCore
             return configurationRoot.GetSection("Certificates").GetChildren()
                 .ToDictionary(
                     certificateSource => certificateSource.Key,
-                    certificateSource => Load(certificateSource, configurationRoot[$"Certificates:{certificateSource.Key}:Password"]));
+                    certificateSource => Load(certificateSource, certificateSource["Password"]));
         }
 
         private abstract class CertificateSource
@@ -115,7 +115,7 @@ namespace Microsoft.AspNetCore
 
             public override X509Certificate2 Load()
             {
-                if (!Enum.TryParse(StoreLocation, true, out StoreLocation storeLocation))
+                if (!Enum.TryParse(StoreLocation, ignoreCase: true, result: out StoreLocation storeLocation))
                 {
                     throw new InvalidOperationException($"Invalid store location: {StoreLocation}");
                 }
