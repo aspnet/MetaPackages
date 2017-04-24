@@ -56,7 +56,22 @@ namespace Microsoft.AspNetCore
             IConfigurationSection endPoint,
             Dictionary<string, X509Certificate2> certificates)
         {
-            options.Listen(IPAddress.Parse(endPoint.GetValue<string>("Address")), endPoint.GetValue<int>("Port"), listenOptions =>
+            var addressValue = endPoint.GetValue<string>("Address");
+            var portValue = endPoint.GetValue<string>("Port");
+
+            IPAddress address;
+            if (!IPAddress.TryParse(addressValue, out address))
+            {
+                throw new InvalidOperationException($"Invalid IP address: {addressValue}");
+            }
+
+            ushort port;
+            if (!ushort.TryParse(portValue, out port))
+            {
+                throw new InvalidOperationException($"Invalid port: {portValue}");
+            }
+
+            options.Listen(address, port, listenOptions =>
             {
                 var certificateName = endPoint.GetValue<string>("Certificate");
 
