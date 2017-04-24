@@ -132,7 +132,7 @@ namespace Microsoft.AspNetCore
                     var foundCertificate = store.Certificates.Find(X509FindType.FindBySubjectName, Subject, validOnly: false)
                         .OfType<X509Certificate2>()
                         .OrderByDescending(certificate => certificate.NotAfter)
-                        .First();
+                        .FirstOrDefault();
 
     #if NET46
                     store.Close();

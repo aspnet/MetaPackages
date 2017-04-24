@@ -20,15 +20,15 @@ namespace Microsoft.AspNetCore
     /// </summary>
     public class KestrelServerOptionsSetup : IConfigureOptions<KestrelServerOptions>
     {
-        private IServiceProvider _services;
+        private readonly IConfiguration _configurationRoot;
 
         /// <summary>
         /// Creates a new instance of <see cref="KestrelServerOptionsSetup"/>.
         /// </summary>
-        /// <param name="services">An <seealso cref="IServiceProvider"/> instance.</param>
-        public KestrelServerOptionsSetup(IServiceProvider services)
+        /// <param name="configurationRoot">The root <seealso cref="IConfiguration"/>.</param>
+        public KestrelServerOptionsSetup(IConfiguration configurationRoot)
         {
-            _services = services;
+            _configurationRoot = configurationRoot;
         }
 
         /// <summary>
@@ -37,28 +37,22 @@ namespace Microsoft.AspNetCore
         /// <param name="options">The <seealso cref="KestrelServerOptions"/> to configure.</param>
         public void Configure(KestrelServerOptions options)
         {
-            options.ApplicationServices = _services;
-
-            var configuration = _services.GetService<IConfiguration>();
-            BindConfiguration(options, configuration);
+            BindConfiguration(options);
         }
 
-        private static void BindConfiguration(
-            KestrelServerOptions options,
-            IConfiguration configurationRoot)
+        private void BindConfiguration(KestrelServerOptions options)
         {
-            var certificates = CertificateLoader.LoadAll(configurationRoot);
-            var endPoints = configurationRoot.GetSection("Kestrel:EndPoints");
+            var certificates = CertificateLoader.LoadAll(_configurationRoot);
+            var endPoints = _configurationRoot.GetSection("Kestrel:EndPoints");
 
             foreach (var endPoint in endPoints.GetChildren())
             {
-                BindEndPoint(options, configurationRoot, endPoint, certificates);
+                BindEndPoint(options, endPoint, certificates);
             }
         }
 
-        private static void BindEndPoint(
+        private void BindEndPoint(
             KestrelServerOptions options,
-            IConfiguration configurationRoot,
             IConfigurationSection endPoint,
             Dictionary<string, X509Certificate2> certificates)
         {
@@ -77,7 +71,7 @@ namespace Microsoft.AspNetCore
 
                     if (certificate.GetChildren().Any())
                     {
-                        var password = configurationRoot[$"Kestrel:EndPoints:{endPoint.Key}:Certificate:Password"];
+                        var password = _configurationRoot[$"Kestrel:EndPoints:{endPoint.Key}:Certificate:Password"];
                         endPointCertificate = CertificateLoader.Load(certificate, password);
                     }
                 }
