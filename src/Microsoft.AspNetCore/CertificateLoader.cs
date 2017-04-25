@@ -20,7 +20,7 @@ namespace Microsoft.AspNetCore
         /// <param name="certificateConfiguration">An <seealso cref="IConfiguration"/> with information about a certificate source.</param>
         /// <param name="password">The certificate password, in case it's being loaded from a file.</param>
         /// <returns>The loaded certificates.</returns>
-        public static X509Certificate2 Load(IConfiguration certificateConfiguration, string password = null)
+        public static X509Certificate2 Load(IConfiguration certificateConfiguration, string password)
         {
             var sourceKind = certificateConfiguration.GetValue<string>("Source");
 
