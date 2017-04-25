@@ -128,6 +128,11 @@ namespace Microsoft.AspNetCore
                         .OrderByDescending(certificate => certificate.NotAfter)
                         .FirstOrDefault();
 
+                    if (foundCertificate == null)
+                    {
+                        throw new InvalidOperationException($"No certificate found for {Subject} in store {StoreName} in {StoreLocation}");
+                    }
+
                     return foundCertificate;
                 }
             }
