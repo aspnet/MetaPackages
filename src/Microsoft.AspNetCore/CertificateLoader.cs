@@ -128,10 +128,6 @@ namespace Microsoft.AspNetCore
                         .OrderByDescending(certificate => certificate.NotAfter)
                         .FirstOrDefault();
 
-    #if NET46
-                    store.Close();
-    #endif
-
                     return foundCertificate;
                 }
             }
