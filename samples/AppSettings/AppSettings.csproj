@@ -4,7 +4,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <UserSecretsId>aspnetcore-MetaPackagesSampleApp-20170421155031</UserSecretsId>
+    <UserSecretsId>aspnetcore-MetaPackagesAppSettings-20170421155031</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
