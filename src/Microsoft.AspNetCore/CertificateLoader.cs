@@ -112,6 +112,7 @@ namespace Microsoft.AspNetCore
             public string Subject { get; set; }
             public string StoreName { get; set; }
             public string StoreLocation { get; set; }
+            public bool AllowInvalid { get; set; }
 
             public override X509Certificate2 Load()
             {
@@ -122,18 +123,43 @@ namespace Microsoft.AspNetCore
 
                 using (var store = new X509Store(StoreName, storeLocation))
                 {
-                    store.Open(OpenFlags.ReadOnly);
-                    var foundCertificate = store.Certificates.Find(X509FindType.FindBySubjectName, Subject, validOnly: false)
-                        .OfType<X509Certificate2>()
-                        .OrderByDescending(certificate => certificate.NotAfter)
-                        .FirstOrDefault();
+                    X509Certificate2Collection storeCertificates = null;
+                    X509Certificate2Collection foundCertificates = null;
 
-                    if (foundCertificate == null)
+                    try
                     {
-                        throw new InvalidOperationException($"No certificate found for {Subject} in store {StoreName} in {StoreLocation}");
-                    }
+                        store.Open(OpenFlags.ReadOnly);
+                        storeCertificates = store.Certificates;
+                        foundCertificates = storeCertificates.Find(X509FindType.FindBySubjectName, Subject, validOnly: !AllowInvalid);
+                        var foundCertificate = foundCertificates
+                            .OfType<X509Certificate2>()
+                            .Where(certificate => certificate.Subject.Equals(Subject, StringComparison.Ordinal))
+                            .OrderByDescending(certificate => certificate.NotAfter)
+                            .FirstOrDefault();
 
-                    return foundCertificate;
+                        if (foundCertificate == null)
+                        {
+                            throw new InvalidOperationException($"No certificate found for {Subject} in store {StoreName} in {StoreLocation}");
+                        }
+
+                        return foundCertificate;
+                    }
+                    finally
+                    {
+                        DisposeCertificates(storeCertificates);
+                        DisposeCertificates(foundCertificates);
+                    }
+                }
+            }
+
+            private void DisposeCertificates(X509Certificate2Collection certificates)
+            {
+                if (certificates != null)
+                {
+                    foreach (var certificate in certificates)
+                    {
+                        certificate.Dispose();
+                    }
                 }
             }
         }
