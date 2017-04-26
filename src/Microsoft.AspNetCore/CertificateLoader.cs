@@ -130,10 +130,9 @@ namespace Microsoft.AspNetCore
                     {
                         store.Open(OpenFlags.ReadOnly);
                         storeCertificates = store.Certificates;
-                        foundCertificates = storeCertificates.Find(X509FindType.FindBySubjectName, Subject, validOnly: !AllowInvalid);
+                        foundCertificates = storeCertificates.Find(X509FindType.FindBySubjectDistinguishedName, Subject, validOnly: !AllowInvalid);
                         var foundCertificate = foundCertificates
                             .OfType<X509Certificate2>()
-                            .Where(certificate => certificate.Subject.Equals(Subject, StringComparison.Ordinal))
                             .OrderByDescending(certificate => certificate.NotAfter)
                             .FirstOrDefault();
 
