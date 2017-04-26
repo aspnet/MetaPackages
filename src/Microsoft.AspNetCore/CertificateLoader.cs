@@ -125,13 +125,14 @@ namespace Microsoft.AspNetCore
                 {
                     X509Certificate2Collection storeCertificates = null;
                     X509Certificate2Collection foundCertificates = null;
+                    X509Certificate2 foundCertificate = null;
 
                     try
                     {
                         store.Open(OpenFlags.ReadOnly);
                         storeCertificates = store.Certificates;
                         foundCertificates = storeCertificates.Find(X509FindType.FindBySubjectDistinguishedName, Subject, validOnly: !AllowInvalid);
-                        var foundCertificate = foundCertificates
+                        foundCertificate = foundCertificates
                             .OfType<X509Certificate2>()
                             .OrderByDescending(certificate => certificate.NotAfter)
                             .FirstOrDefault();
@@ -145,6 +146,12 @@ namespace Microsoft.AspNetCore
                     }
                     finally
                     {
+                        if (foundCertificate != null)
+                        {
+                            storeCertificates.Remove(foundCertificate);
+                            foundCertificates.Remove(foundCertificate);
+                        }
+
                         DisposeCertificates(storeCertificates);
                         DisposeCertificates(foundCertificates);
                     }
