@@ -2,8 +2,17 @@
   <Import Project="common.props" />
 
   <PropertyGroup>
+    <!-- Project for building the Runtime Store -->
     <MetaPackagePath>$(RepositoryRoot)src\Microsoft.AspNetCore.RuntimeStore\</MetaPackagePath>
     <MetaPackageFile>$(MetaPackagePath)Microsoft.AspNetCore.RuntimeStore.csproj</MetaPackageFile>
+
+    <!-- Project for building the NuGet Fallback Archive (LZMA for CLI) -->
+    <FallbackArchiveDir>$(RepositoryRoot)src\Archive.AspNetCore.All\</FallbackArchiveDir>
+    <FallbackArchiveProj>$(FallbackArchiveDir)Archive.AspNetCore.All.csproj</FallbackArchiveProj>
+    <FallbackStagingDir>$(FallbackArchiveDir)obj/packages</FallbackStagingDir>
+    <FallbackOutputArchive>$(FallbackArchiveDir)bin/nuGetPackagesArchive.lzma</FallbackStagingDir>
+    <FallbackRestoreConfigFile>$(RepositoryRoot)NuGet.config</FallbackRestoreConfigFile>
+
     <WorkingDirectory>$(MetaPackagePath)bin\work\</WorkingDirectory>
     <PackageCacheOutputPath>$(MetaPackagePath)bin\packageCache\</PackageCacheOutputPath>
     <DepsOutputPath>$(MetaPackagePath)bin\deps\</DepsOutputPath>
@@ -86,6 +95,20 @@
     <!--Drop a nuspec file in artifacts for packing zip files into a nupkg-->
     <Copy SourceFiles="$(RepositoryRoot)build\Build.RuntimeStore.nuspec" DestinationFolder="$(ArtifactsDir)" Condition="'$(OSPlatform)'=='Windows'" />
     <WriteLinesToFile File="$(ArtifactsDir)version.txt" Lines="$(VersionPrefix)-$(VersionSuffix)" Overwrite="true" Condition="'$(OSPlatform)'=='Windows'" />
+  </Target>
+
+  <Target Name="BuildFallbackArchive" DependsOnTargets="UpdateNuGetConfig">
+    <!-- Determine ASP.NET Package Version -->
+    <PropertyGroup>
+        <AspNetPackageVersion>???</AspNetPackageVersion>
+    </PropertyGroup>
+
+    <!-- Clear the directories -->
+    <RemoveDir Directories="$(FallbackArchiveDir)bin" />
+    <RemoveDir Directories="$(FallbackArchiveDir)obj" />
+
+    <!-- Restore the target project -->
+    <MsBuild Projects="$(FallbackArchiveProj)" Targets="Restore" Properties="RestorePackagesPath=$(FallbackStagingDir);AspNetPackageVersion=$(AspNetPackageVersion);RestoreConfigFile=$(FallbackRestoreConfigFile)" />
   </Target>
 
   <Target Name="AddManifestsToNupkg">
