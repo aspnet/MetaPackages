@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
   <Import Project="common.props" />
 
   <PropertyGroup>
@@ -36,12 +36,14 @@
     </GetOSPlatform>
 
     <PropertyGroup>
-      <OutputZipSufix Condition="'$(OSPlatform)' == 'Windows'">win</OutputZipSufix>
-      <OutputZipSufix Condition="'$(OSPlatform)' == 'Linux'">linux</OutputZipSufix>
-      <OutputZipSufix Condition="'$(OSPlatform)' == 'macOS'">osx</OutputZipSufix>
+      <OutputZipSuffix Condition="'$(OSPlatform)' == 'Windows'">win</OutputZipSuffix>
+      <OutputZipSuffix Condition="'$(OSPlatform)' == 'Linux'">linux</OutputZipSuffix>
+      <OutputZipSuffix Condition="'$(OSPlatform)' == 'macOS'">osx</OutputZipSuffix>
 
-      <OutputZip>$(ArtifactsDir)Build.RuntimeStore.$(OutputZipSufix)-$(VersionSuffix).zip</OutputZip>
-      <DepsOutputZip>$(ArtifactsDir)Build.Deps.$(OutputZipSufix)-$(VersionSuffix).zip</DepsOutputZip>
+      <OutputZip>$(ArtifactsDir)Build.RuntimeStore.$(OutputZipSuffix)-$(VersionSuffix).zip</OutputZip>
+      <OutputTarball>$(ArtifactsDir)Build.RuntimeStore.$(OutputZipSuffix)-$(VersionSuffix).tar.gz</OutputTarball>
+      <DepsOutputZip>$(ArtifactsDir)Build.Deps.$(OutputZipSuffix)-$(VersionSuffix).zip</DepsOutputZip>
+      <DepsOutputTarball>$(ArtifactsDir)Build.Deps.$(OutputZipSuffix)-$(VersionSuffix).tar.gz</DepsOutputTarball>
     </PropertyGroup>
 
     <ItemGroup>
@@ -74,6 +76,15 @@
 
     <ZipArchive File="$(OutputZip)" SourceFiles="@(PackageCacheFiles)" WorkingDirectory="$(OutputPath)" />
     <ZipArchive File="$(DepsOutputZip)" SourceFiles="@(DepsFiles)" WorkingDirectory="$(DepsOutputPath)" />
+
+    <Exec Command="$(MSBuildThisFileDirectory)zip2tgz.sh $(OutputZip) $(OutputTarball)"
+      WorkingDirectory="$(ArtifactsDir)"
+      IgnoreStandardErrorWarningFormat="true"
+      Condition="'$(OS)' != 'Windows_NT' AND Exists('$(OutputZip)')" />
+    <Exec Command="$(MSBuildThisFileDirectory)zip2tgz.sh $(DepsOutputZip) $(DepsOutputTarball)"
+      WorkingDirectory="$(ArtifactsDir)"
+      IgnoreStandardErrorWarningFormat="true"
+      Condition="'$(OS)' != 'Windows_NT' AND Exists('$(DepsOutputZip)')" />
 
     <Copy SourceFiles="%(PackageStoreManifestFiles.FullPath)" DestinationFiles="$(ArtifactsDir)%(PackageStoreManifestFiles.DestinationFile)" />
 
