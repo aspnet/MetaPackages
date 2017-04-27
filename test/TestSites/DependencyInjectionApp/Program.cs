@@ -56,6 +56,5 @@ namespace CreateDefaultBuilderApp
         class AnotherService: IAnotherService
         {
         }
-
     }
 }
