@@ -74,7 +74,7 @@ namespace Microsoft.AspNetCore.Tests
         }
 
         [Theory]
-        [InlineData("Development", "Cannot inject blba bla")]
+        [InlineData("Development", "InvalidOperationException: Cannot consume scoped service")]
         [InlineData("Production", "Success")]
         public async Task CreateDefaultBuilder_InitializesDependencyInjectionSettingsBasedOnEnv(string environment, string expected)
         {
@@ -82,20 +82,12 @@ namespace Microsoft.AspNetCore.Tests
             await ExecuteTestApp(applicationName, async (deploymentResult, logger) =>
             {
                 var response = await RetryHelper.RetryRequest(() => deploymentResult.HttpClient.GetAsync(string.Empty), logger, deploymentResult.HostShutdownToken);
-                var errorResponse = await RetryHelper.RetryRequest(() => deploymentResult.HttpClient.GetAsync("/error"), logger, deploymentResult.HostShutdownToken);
-
                 var responseText = await response.Content.ReadAsStringAsync();
-                var errorResponseText = await errorResponse.Content.ReadAsStringAsync();
                 try
                 {
-                    // Assert server is Kestrel
-                    Assert.Equal("Kestrel", response.Headers.Server.ToString());
-
-                    // The application name will be sent in response when all asserts succeed in the test app.
-                    Assert.Equal(applicationName, responseText);
 
                     // Assert UseDeveloperExceptionPage is called in WebHostStartupFilter.
-                    Assert.Contains("An unhandled exception occurred while processing the request.", errorResponseText);
+                    Assert.Contains(expected, responseText);
                 }
                 catch (XunitException)
                 {
@@ -103,7 +95,7 @@ namespace Microsoft.AspNetCore.Tests
                     logger.LogWarning(responseText);
                     throw;
                 }
-            }, setTestEnvVars: true);
+            }, setTestEnvVars: true, environment: environment);
         }
 
         [Theory]
@@ -283,20 +275,16 @@ namespace Microsoft.AspNetCore.Tests
         private async Task ExecuteTestApp(string applicationName,
             Func<DeploymentResult, ILogger, Task> assertAction,
             bool setTestEnvVars = false,
-            string environment = null)
+            string environment = "Development")
         {
             using (StartLog(out var loggerFactory, applicationName))
             {
                 var logger = loggerFactory.CreateLogger(nameof(WebHost.Start));
                 var deploymentParameters = new DeploymentParameters(Path.Combine(_testSitesPath, applicationName), ServerType.Kestrel, RuntimeFlavor.CoreClr, RuntimeArchitecture.x64);
-                if (!string.IsNullOrEmpty(environment))
-                {
-                    deploymentParameters.EnvironmentName = environment;
-                }
 
                 if (setTestEnvVars)
                 {
-                    deploymentParameters.EnvironmentVariables.Add(new KeyValuePair<string, string>("aspnetcore_environment", "Development"));
+                    deploymentParameters.EnvironmentVariables.Add(new KeyValuePair<string, string>("aspnetcore_environment", environment));
                     deploymentParameters.EnvironmentVariables.Add(new KeyValuePair<string, string>("envKey", "envValue"));
                 }
 
