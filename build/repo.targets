@@ -158,6 +158,13 @@
     <!-- This won't rerun the whole build, but it ensures that the necessary MSBuild Tasks and Properties are initialized -->
     <MSBuild Projects="$(ProjectPath)" Targets="_BuildFallbackArchive" Properties="AspNetPackageVersion=$(TimestampVersion);PackageSource=$(TimestampSource);OutputPackageName=nuGetPackagesArchive.$(BuildNumber).timestamped" />
     <MSBuild Projects="$(ProjectPath)" Targets="_BuildFallbackArchive" Properties="AspNetPackageVersion=$(NoTimestampVersion);PackageSource=$(NoTimestampSource);OutputPackageName=nuGetPackagesArchive.$(BuildNumber).notimestamp" />
+
+    <!-- Copy LZMA archives to Coherence-Signed drop location -->
+    <PropertyGroup>
+        <PublishDir Condition="'$(PublishShare)' != ''">$(PublishShare)\fallbackArchives</PublishDir>
+    </PropertyGroup>
+    <Copy SourceFiles="artifacts\nuGetPackagesArchive.$(BuildNumber).timestamped;artifacts\nuGetPackagesArchive.$(BuildNumber).notimestamp" DestinationFolder="$(PublishDir)" Condition="'$(PublishDir)' != ''" />
+
   </Target>
 
   <Target Name="AddManifestsToNupkg">
