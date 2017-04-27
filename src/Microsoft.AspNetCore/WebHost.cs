@@ -161,10 +161,17 @@ namespace Microsoft.AspNetCore
 
                     if (env.IsDevelopment())
                     {
-                        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-                        if (appAssembly != null)
+                        try
                         {
-                            config.AddUserSecrets(appAssembly);
+                            var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                            if (appAssembly != null)
+                            {
+                                config.AddUserSecrets(appAssembly);
+                            }
+                        }
+                        catch
+                        {
+                            // silently fail if we cannot load the assembly or find the user secrets ID
                         }
                     }
 
