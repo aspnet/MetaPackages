@@ -44,6 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestArtifacts", "TestArtifa
 	ProjectSection(SolutionItems) = preProject
 		test\TestArtifacts\testCert.pfx = test\TestArtifacts\testCert.pfx
 	EndProjectSection
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-archive", "src\dotnet-archive\dotnet-archive.csproj", "{AE4216BF-D471-471B-82F3-6B6D004F7D17}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.DotNet.Archive", "src\Microsoft.DotNet.Archive\Microsoft.DotNet.Archive.csproj", "{302400A0-98BB-4C04-88D4-C32DC2D4B945}"
