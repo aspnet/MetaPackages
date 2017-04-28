@@ -17,6 +17,6 @@
         </DepsFiles>
       </ItemGroup>
 
-      <Copy SourceFiles="%(DepsFiles.FullPath)" DestinationFiles="$(DepsOutputPath)\%(DepsFiles.PackageName)\Microsoft.NETCore.App\2.0.0\deps.json" />
+      <Copy SourceFiles="%(DepsFiles.FullPath)" DestinationFiles="$(DepsOutputPath)\%(DepsFiles.PackageName)\Microsoft.NETCore.App\$(RuntimeFrameworkVersion)\deps.json" />
   </Target>
 </Project>
