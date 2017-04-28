@@ -17,14 +17,14 @@ namespace Microsoft.AspNetCore
         private readonly IConfiguration _certificatesConfiguration;
 
         /// <summary>
-        /// Creates a new instance of <see cref="KestrelServerOptionsSetup"/>.
+        /// Creates a new instance of <see cref="CertificateLoader"/>.
         /// </summary>
         public CertificateLoader()
         {
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="KestrelServerOptionsSetup"/> that can load certificates by name.
+        /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificates by name.
         /// </summary>
         /// <param name="certificatesConfig">An <see cref="IConfiguration"/> instance with information about certificates.</param>
         public CertificateLoader(IConfiguration certificatesConfig)
@@ -127,12 +127,12 @@ namespace Microsoft.AspNetCore
 
             public override X509Certificate2 Load()
             {
-                var certificate = TryLoad(X509KeyStorageFlags.DefaultKeySet, out var error)
-                    ?? TryLoad(X509KeyStorageFlags.UserKeySet, out error)
-    #if NETCOREAPP2_0
-                    ?? TryLoad(X509KeyStorageFlags.EphemeralKeySet, out error)
-    #endif
-                    ;
+                Exception error;
+                var certificate =
+#if NETCOREAPP2_0
+                    TryLoad(X509KeyStorageFlags.EphemeralKeySet, out error) ??
+#endif
+                    TryLoad(X509KeyStorageFlags.UserKeySet, out error);
 
                 if (error != null)
                 {
