@@ -6,7 +6,7 @@
     <MetaPackagePath>$(RepositoryRoot)src\Microsoft.AspNetCore.RuntimeStore\</MetaPackagePath>
     <MetaPackageFile>$(MetaPackagePath)Microsoft.AspNetCore.RuntimeStore.csproj</MetaPackageFile>
 
-    <HostingStartupTemplatePath>$(RepositoryRoot)src\Microsoft.AspNetCore.HostingStartup.Template\</HostingStartupTemplatePath>
+    <HostingStartupTemplatePath>$(RepositoryRoot)tools\Microsoft.AspNetCore.HostingStartup.Template\</HostingStartupTemplatePath>
     <HostingStartupTemplateFile>$(HostingStartupTemplatePath)Microsoft.AspNetCore.HostingStartup.Template.csproj</HostingStartupTemplateFile>
 
     <!-- Project for building the NuGet Fallback Archive (LZMA for CLI) -->
