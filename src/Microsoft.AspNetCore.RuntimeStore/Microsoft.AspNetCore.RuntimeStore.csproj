@@ -7,6 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-   <PackageReference Include="@(RuntimeStorePackageReference)"  Version="$(AspNetCoreVersion)" PrivateAssets="None" />
+   <PackageReference Include="@(RuntimeStorePackageReference)" />
   </ItemGroup>
 </Project>

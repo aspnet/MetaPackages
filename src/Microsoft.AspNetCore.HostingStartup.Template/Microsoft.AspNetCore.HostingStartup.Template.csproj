@@ -14,7 +14,7 @@
 
   <Target Name="CollectDeps">
     <PropertyGroup>
-      <DestinationDepsFile>$(DepsOutputPath)\$(HostingStartupPackageName)\shared\Microsoft.NETCore.App\$(RuntimeFrameworkVersion)\deps.json</DestinationDepsFile>
+      <DestinationDepsFile>$(DepsOutputPath)\$(HostingStartupPackageName)\shared\Microsoft.NETCore.App\$(RuntimeFrameworkVersion)\$(HostingStartupPackageName).deps.json</DestinationDepsFile>
     </PropertyGroup>
       <Copy SourceFiles="$(ProjectDepsFilePath)" DestinationFiles="$(DestinationDepsFile)" />
       <Exec Command="dotnet run --framework netcoreapp2.0 $([System.IO.Path]::GetFullPath('$(DestinationDepsFile)'))" WorkingDirectory="../TrimDeps/"/>

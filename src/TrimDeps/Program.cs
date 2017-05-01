@@ -1,3 +1,6 @@
+// Copyright (c) .NET Foundation and contributors. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -7,10 +10,10 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        ChangeEntryPointLibraryName(args[0], null);
+        ChangeEntryPointLibraryName(args[0]);
     }
 
-    private static void ChangeEntryPointLibraryName(string depsFile, string newName)
+    private static void ChangeEntryPointLibraryName(string depsFile)
     {
         JToken deps;
         using (var file = File.OpenText(depsFile))
@@ -27,27 +30,14 @@ public class Program
             {
                 continue;
             }
-            version = targetLibrary.Name.Substring(targetLibrary.Name.IndexOf('/') + 1);
-            if (newName == null)
-            {
-                targetLibrary.Remove();
-            }
-            else
-            {
-                targetLibrary.Replace(new JProperty(newName + '/' + version, targetLibrary.Value));
-            }
+
+            targetLibrary.Remove();
         }
         if (version != null)
         {
             var library = deps["libraries"].Children<JProperty>().First();
-            if (newName == null)
-            {
-                library.Remove();
-            }
-            else
-            {
-                library.Replace(new JProperty(newName + '/' + version, library.Value));
-            }
+            library.Remove();
+
             using (var file = File.CreateText(depsFile))
             using (var writer = new JsonTextWriter(file) { Formatting = Formatting.Indented })
             {
