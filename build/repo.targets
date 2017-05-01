@@ -15,9 +15,9 @@
 
     <WorkingDirectory>$(MetaPackagePath)bin\work\</WorkingDirectory>
     <PackageCacheOutputPath>$(MetaPackagePath)bin\packageCache\</PackageCacheOutputPath>
-    <DepsOutputPath>$(HostingStartupTemplatePath)bin\deps\</DepsOutputPath>
     <ArtifactsDir>$(RepositoryRoot)artifacts\</ArtifactsDir>
     <ArtifactsZipDir>$(ArtifactsDir)zip\</ArtifactsZipDir>
+    <DepsOutputPath>$(ArtifactsDir)deps\</DepsOutputPath>
     <ArtifactsZipTimestampDir>$(ArtifactsZipDir)ts\</ArtifactsZipTimestampDir>
     <ArtifactsZipNoTimestampDir>$(ArtifactsZipDir)nt\</ArtifactsZipNoTimestampDir>
     <TempDir>$(ArtifactsDir)temp\</TempDir>
