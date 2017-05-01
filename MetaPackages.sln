@@ -49,7 +49,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-archive", "src\dotne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.DotNet.Archive", "src\Microsoft.DotNet.Archive\Microsoft.DotNet.Archive.csproj", "{302400A0-98BB-4C04-88D4-C32DC2D4B945}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimDeps", "src\TrimDeps\TrimDeps.csproj", "{67E4C92F-6D12-4C52-BB79-B8D11BFC6B82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimDeps", "tools\TrimDeps\TrimDeps.csproj", "{67E4C92F-6D12-4C52-BB79-B8D11BFC6B82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
