@@ -8,11 +8,6 @@
 
   <ItemGroup>
     <Content Include="TestArtifacts\Certificate.pfx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestArtifacts\Certificate1.pfx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestArtifacts\Certificate2.pfx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestArtifacts\Certificate3.pfx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestArtifacts\Certificate4.pfx" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="TestArtifacts\Certificate5.pfx" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>
