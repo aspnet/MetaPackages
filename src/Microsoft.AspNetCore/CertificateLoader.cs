@@ -15,21 +15,32 @@ namespace Microsoft.AspNetCore
     public class CertificateLoader
     {
         private readonly IConfiguration _certificatesConfiguration;
+        private readonly ICertificateFileLoader _certificateFileLoader;
+        private readonly ICertificateStoreLoader _certificateStoreLoader;
 
         /// <summary>
         /// Creates a new instance of <see cref="CertificateLoader"/>.
         /// </summary>
         public CertificateLoader()
+            : this(null)
         {
         }
 
         /// <summary>
-        /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificates by name.
+        /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificate references from configuration.
         /// </summary>
-        /// <param name="certificatesConfig">An <see cref="IConfiguration"/> instance with information about certificates.</param>
-        public CertificateLoader(IConfiguration certificatesConfig)
+        /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
+        public CertificateLoader(IConfiguration certificatesConfiguration)
+            : this(certificatesConfiguration, new CertificateFileLoader(), new CertificateStoreLoader())
         {
-            _certificatesConfiguration = certificatesConfig;
+            _certificatesConfiguration = certificatesConfiguration;
+        }
+
+        internal CertificateLoader(IConfiguration certificatesConfiguration, ICertificateFileLoader certificateFileLoader, ICertificateStoreLoader certificateStoreLoader)
+        {
+            _certificatesConfiguration = certificatesConfiguration;
+            _certificateFileLoader = certificateFileLoader;
+            _certificateStoreLoader = certificateStoreLoader;
         }
 
         /// <summary>
@@ -47,16 +58,24 @@ namespace Microsoft.AspNetCore
 
             if (certificateNames != null)
             {
-                foreach (var certificateName in certificateNames.Split(' '))
+                foreach (var certificateName in certificateNames.Split(';'))
                 {
-                    certificates.Add(Load(certificateName));
+                    var certificate = LoadSingle(certificateName);
+                    if (certificate != null)
+                    {
+                        certificates.Add(certificate);
+                    }
                 }
             }
             else
             {
                 if (certificateConfiguration["Source"] != null)
                 {
-                    certificates.Add(LoadSingle(certificateConfiguration));
+                    var certificate = LoadSingle(certificateConfiguration);
+                    if (certificate != null)
+                    {
+                        certificates.Add(certificate);
+                    }
                 }
                 else
                 {
@@ -75,11 +94,11 @@ namespace Microsoft.AspNetCore
         /// <remarks>This method only works if the <see cref="CertificateLoader"/> instance was constructed with
         /// a reference to an <see cref="IConfiguration"/> instance containing named certificates.
         /// </remarks>
-        public X509Certificate2 Load(string certificateName)
+        private X509Certificate2 LoadSingle(string certificateName)
         {
             var certificateConfiguration = _certificatesConfiguration?.GetSection(certificateName);
 
-            if (certificateConfiguration == null)
+            if (!certificateConfiguration.Exists())
             {
                 throw new InvalidOperationException($"No certificate named {certificateName} found in configuration");
             }
@@ -95,10 +114,10 @@ namespace Microsoft.AspNetCore
             switch (sourceKind.ToLowerInvariant())
             {
                 case "file":
-                    certificateSource = new CertificateFileSource();
+                    certificateSource = new CertificateFileSource(_certificateFileLoader);
                     break;
                 case "store":
-                    certificateSource = new CertificateStoreSource();
+                    certificateSource = new CertificateStoreSource(_certificateStoreLoader);
                     break;
                 default:
                     throw new InvalidOperationException($"Invalid certificate source kind: {sourceKind}");
@@ -110,7 +129,9 @@ namespace Microsoft.AspNetCore
         }
 
         private IEnumerable<X509Certificate2> LoadMultiple(IConfigurationSection certificatesConfiguration)
-            => certificatesConfiguration.GetChildren().Select(LoadSingle);
+            => certificatesConfiguration.GetChildren()
+                .Select(LoadSingle)
+                .Where(c => c != null);
 
         private abstract class CertificateSource
         {
@@ -121,18 +142,25 @@ namespace Microsoft.AspNetCore
 
         private class CertificateFileSource : CertificateSource
         {
+            private ICertificateFileLoader _certificateFileLoader;
+
+            public CertificateFileSource(ICertificateFileLoader certificateFileLoader)
+            {
+                _certificateFileLoader = certificateFileLoader;
+            }
+
             public string Path { get; set; }
 
             public string Password { get; set; }
 
             public override X509Certificate2 Load()
             {
-                Exception error;
-                var certificate =
+                var certificate = TryLoad(X509KeyStorageFlags.DefaultKeySet, out var error)
+                    ?? TryLoad(X509KeyStorageFlags.UserKeySet, out error)
 #if NETCOREAPP2_0
-                    TryLoad(X509KeyStorageFlags.EphemeralKeySet, out error) ??
+                    ?? TryLoad(X509KeyStorageFlags.EphemeralKeySet, out error)
 #endif
-                    TryLoad(X509KeyStorageFlags.UserKeySet, out error);
+                    ;
 
                 if (error != null)
                 {
@@ -146,7 +174,7 @@ namespace Microsoft.AspNetCore
             {
                 try
                 {
-                    var loadedCertificate = new X509Certificate2(Path, Password, flags);
+                    var loadedCertificate = _certificateFileLoader.Load(Path, Password, flags);
                     exception = null;
                     return loadedCertificate;
                 }
@@ -160,6 +188,13 @@ namespace Microsoft.AspNetCore
 
         private class CertificateStoreSource : CertificateSource
         {
+            private readonly ICertificateStoreLoader _certificateStoreLoader;
+
+            public CertificateStoreSource(ICertificateStoreLoader certificateStoreLoader)
+            {
+                _certificateStoreLoader = certificateStoreLoader;
+            }
+
             public string Subject { get; set; }
             public string StoreName { get; set; }
             public string StoreLocation { get; set; }
@@ -172,52 +207,7 @@ namespace Microsoft.AspNetCore
                     throw new InvalidOperationException($"Invalid store location: {StoreLocation}");
                 }
 
-                using (var store = new X509Store(StoreName, storeLocation))
-                {
-                    X509Certificate2Collection storeCertificates = null;
-                    X509Certificate2Collection foundCertificates = null;
-                    X509Certificate2 foundCertificate = null;
-
-                    try
-                    {
-                        store.Open(OpenFlags.ReadOnly);
-                        storeCertificates = store.Certificates;
-                        foundCertificates = storeCertificates.Find(X509FindType.FindBySubjectDistinguishedName, Subject, validOnly: !AllowInvalid);
-                        foundCertificate = foundCertificates
-                            .OfType<X509Certificate2>()
-                            .OrderByDescending(certificate => certificate.NotAfter)
-                            .FirstOrDefault();
-
-                        if (foundCertificate == null)
-                        {
-                            throw new InvalidOperationException($"No certificate found for {Subject} in store {StoreName} in {StoreLocation}");
-                        }
-
-                        return foundCertificate;
-                    }
-                    finally
-                    {
-                        if (foundCertificate != null)
-                        {
-                            storeCertificates.Remove(foundCertificate);
-                            foundCertificates.Remove(foundCertificate);
-                        }
-
-                        DisposeCertificates(storeCertificates);
-                        DisposeCertificates(foundCertificates);
-                    }
-                }
-            }
-
-            private void DisposeCertificates(X509Certificate2Collection certificates)
-            {
-                if (certificates != null)
-                {
-                    foreach (var certificate in certificates)
-                    {
-                        certificate.Dispose();
-                    }
-                }
+                return _certificateStoreLoader.Load(Subject, StoreName, storeLocation, !AllowInvalid);
             }
         }
     }
