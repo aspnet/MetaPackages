@@ -53,8 +53,7 @@ namespace Microsoft.AspNetCore
         public IEnumerable<X509Certificate2> Load(IConfigurationSection certificateConfiguration)
         {
             var certificateNames = certificateConfiguration.Value;
-
-            List<X509Certificate2> certificates = new List<X509Certificate2>();
+            var certificates = new List<X509Certificate2>();
 
             if (certificateNames != null)
             {
