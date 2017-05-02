@@ -99,7 +99,7 @@ namespace Microsoft.AspNetCore
 
             if (!certificateConfiguration.Exists())
             {
-                throw new InvalidOperationException($"No certificate named {certificateName} found in configuration");
+                throw new CertificateConfigurationException($"No certificate named {certificateName} found in configuration for the current environment");
             }
 
             return LoadSingle(certificateConfiguration);
@@ -119,7 +119,7 @@ namespace Microsoft.AspNetCore
                     certificateSource = new CertificateStoreSource(_certificateStoreLoader);
                     break;
                 default:
-                    throw new InvalidOperationException($"Invalid certificate source kind: {sourceKind}");
+                    throw new CertificateConfigurationException($"Invalid certificate source kind: {sourceKind}");
             }
 
             certificateConfiguration.Bind(certificateSource);
@@ -163,7 +163,7 @@ namespace Microsoft.AspNetCore
 
                 if (error != null)
                 {
-                    throw error;
+                    throw new CertificateConfigurationException($"Unable to load certificate from file '{Path}': {error.Message}");
                 }
 
                 return certificate;
@@ -203,7 +203,7 @@ namespace Microsoft.AspNetCore
             {
                 if (!Enum.TryParse(StoreLocation, ignoreCase: true, result: out StoreLocation storeLocation))
                 {
-                    throw new InvalidOperationException($"Invalid store location: {StoreLocation}");
+                    throw new CertificateConfigurationException($"Invalid certificate store location: {StoreLocation}");
                 }
 
                 return _certificateStoreLoader.Load(Subject, StoreName, storeLocation, !AllowInvalid);

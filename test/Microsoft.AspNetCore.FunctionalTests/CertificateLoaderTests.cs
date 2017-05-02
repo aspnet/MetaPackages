@@ -64,7 +64,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateFileLoader>(),
                 Mock.Of<ICertificateStoreLoader>());
 
-            var exception = Assert.Throws<InvalidOperationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
             Assert.Equal("No certificate named Certificate2 found in configuration", exception.Message);
         }
 
@@ -81,19 +81,18 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 })
                 .Build();
 
-            var exception = new Exception();
-
             var certificateFileLoader = new Mock<ICertificateFileLoader>();
             certificateFileLoader
                 .Setup(loader => loader.Load("Certificate1.pfx", "Password1", It.IsAny<X509KeyStorageFlags>()))
-                .Callback(() => throw exception);
+                .Callback(() => throw new Exception(nameof(Throws_SingleCertificateName_File_FileNotFound)));
 
             var certificateLoader = new CertificateLoader(
                 configuration.GetSection("Certificates"),
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
 
-            Assert.Same(exception, Assert.Throws<Exception>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate"))));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            Assert.Equal($"Failed to load certificate from file 'Certificate1.pfx': {nameof(Throws_SingleCertificateName_File_FileNotFound)}", exception.Message);
         }
 
         [Fact]
@@ -147,7 +146,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateFileLoader>(),
                 Mock.Of<ICertificateStoreLoader>());
 
-            var exception = Assert.Throws<InvalidOperationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
             Assert.Equal("No certificate named Certificate2 found in configuration", exception.Message);
         }
 
@@ -256,7 +255,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
 
-            var exception = Assert.Throws<InvalidOperationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
             Assert.Equal("No certificate named NotFound found in configuration", exception.Message);
         }
 
@@ -279,7 +278,6 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Build();
 
             var certificate1 = new X509Certificate2();
-            var exception = new Exception();
 
             var certificateFileLoader = new Mock<ICertificateFileLoader>();
             certificateFileLoader
@@ -287,14 +285,15 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(certificate1);
             certificateFileLoader
                 .Setup(loader => loader.Load("Certificate2.pfx", "Password2", It.IsAny<X509KeyStorageFlags>()))
-                .Throws(exception);
+                .Throws(new Exception(nameof(Throws_MultipleCertificateNames_File_FileNotFound)));
 
             var certificateLoader = new CertificateLoader(
                 configuration.GetSection("Certificates"),
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
 
-            Assert.Same(exception, Assert.Throws<Exception>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate"))));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            Assert.Equal($"Failed to load certificate from file 'Certificate2.pfx': {nameof(Throws_MultipleCertificateNames_File_FileNotFound)}", exception.Message);
         }
 
         [Fact]
@@ -377,7 +376,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateFileLoader>(),
                 certificateStoreLoader.Object);
 
-            var exception = Assert.Throws<InvalidOperationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
             Assert.Equal("No certificate named NotFound found in configuration", exception.Message);
         }
 
@@ -509,7 +508,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 certificateFileLoader.Object,
                 certificateStoreLoader.Object);
 
-            var exception = Assert.Throws<InvalidOperationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
             Assert.Equal("No certificate named NotFound found in configuration", exception.Message);
         }
 
@@ -532,13 +531,12 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 })
                 .Build();
 
-            var exception = new Exception();
             var storeCertificate = new X509Certificate2();
 
             var certificateFileLoader = new Mock<ICertificateFileLoader>();
             certificateFileLoader
                 .Setup(loader => loader.Load("Certificate1.pfx", "Password1", It.IsAny<X509KeyStorageFlags>()))
-                .Throws(exception);
+                .Throws(new Exception(nameof(Throws_MultipleCertificateNames_FileAndStore_FileNotFound)));
 
             var certificateStoreLoader = new Mock<ICertificateStoreLoader>();
             certificateStoreLoader
@@ -550,7 +548,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 certificateFileLoader.Object,
                 certificateStoreLoader.Object);
 
-            Assert.Same(exception, Assert.Throws<Exception>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate"))));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            Assert.Equal($"Failed to load certificate from file 'Certificate1.pfx': {nameof(Throws_MultipleCertificateNames_FileAndStore_FileNotFound)}", exception.Message);
         }
 
         [Theory]
@@ -638,19 +637,18 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 })
                 .Build();
 
-            var exception = new Exception();
-
             var certificateFileLoader = new Mock<ICertificateFileLoader>();
             certificateFileLoader
                 .Setup(loader => loader.Load("Certificate1.pfx", "Password1", It.IsAny<X509KeyStorageFlags>()))
-                .Throws(exception);
+                .Throws(new Exception(nameof(Throws_SingleCertificateInline_FileNotFound)));
 
             var certificateLoader = new CertificateLoader(
                 null,
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
 
-            Assert.Same(exception, Assert.Throws<Exception>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate"))));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
+            Assert.Equal($"Failed to load certificate from file 'Certificate1.pfx': {nameof(Throws_SingleCertificateInline_FileNotFound)}", exception.Message);
             certificateFileLoader.VerifyAll();
         }
 
@@ -764,7 +762,6 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Build();
 
             var certificate1 = new X509Certificate2();
-            var exception = new Exception();
 
             var certificateFileLoader = new Mock<ICertificateFileLoader>();
             certificateFileLoader
@@ -772,14 +769,15 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(certificate1);
             certificateFileLoader
                 .Setup(loader => loader.Load("Certificate2.pfx", "Password2", It.IsAny<X509KeyStorageFlags>()))
-                .Throws(exception);
+                .Throws(new Exception(nameof(Throws_MultipleCertificatesInline_File_FileNotFound)));
 
             var certificateLoader = new CertificateLoader(
                 null,
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
 
-            Assert.Same(exception, Assert.Throws<Exception>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificates"))));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificates")));
+            Assert.Equal($"Failed to load certificate from file 'Certificate2.pfx': {nameof(Throws_MultipleCertificatesInline_File_FileNotFound)}", exception.Message);
         }
 
         [Fact]
@@ -937,13 +935,12 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 })
                 .Build();
 
-            var exception = new Exception();
             var certificate = new X509Certificate2();
 
             var certificateFileLoader = new Mock<ICertificateFileLoader>();
             certificateFileLoader
                 .Setup(loader => loader.Load("Certificate1.pfx", "Password1", It.IsAny<X509KeyStorageFlags>()))
-                .Throws(exception);
+                .Throws(new Exception(nameof(Throws_MultipleCertificatesInline_FileAndStore_FileNotFound)));
 
             var certificateStoreLoader = new Mock<ICertificateStoreLoader>();
             certificateStoreLoader
@@ -955,7 +952,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 certificateFileLoader.Object,
                 certificateStoreLoader.Object);
 
-            Assert.Same(exception, Assert.Throws<Exception>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificates"))));
+            var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificates")));
+            Assert.Equal($"Failed to load certificate from file 'Certificate1.pfx': {nameof(Throws_MultipleCertificatesInline_FileAndStore_FileNotFound)}", exception.Message);
         }
 
         [Fact]

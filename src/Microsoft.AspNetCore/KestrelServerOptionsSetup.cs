@@ -63,7 +63,7 @@ namespace Microsoft.AspNetCore
 
                     if (certificate == null)
                     {
-                        throw new InvalidOperationException($"Unable to load certificate for endpoint '{endPoint.Key}'");
+                        throw new CertificateConfigurationException($"Unable to load certificate for endpoint '{endPoint.Key}'");
                     }
 
                     listenOptions.UseHttps(certificate);
