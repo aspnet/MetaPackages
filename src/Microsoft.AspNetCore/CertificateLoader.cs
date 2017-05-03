@@ -34,7 +34,7 @@ namespace Microsoft.AspNetCore
         /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificate references from configuration.
         /// </summary>
         /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
-        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance..</param>
+        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance.</param>
         public CertificateLoader(IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory)
             : this(certificatesConfiguration, loggerFactory, null)
         {
@@ -44,7 +44,7 @@ namespace Microsoft.AspNetCore
         /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificate references from configuration.
         /// </summary>
         /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
-        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance..</param>
+        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance.</param>
         /// <param name="environmentName">The name of the environment the application is running in.</param>
         public CertificateLoader(IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory, string environmentName)
             : this(certificatesConfiguration, loggerFactory, environmentName, new CertificateFileLoader(), new CertificateStoreLoader())
