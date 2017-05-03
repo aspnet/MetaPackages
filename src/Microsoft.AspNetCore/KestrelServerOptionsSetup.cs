@@ -75,7 +75,7 @@ namespace Microsoft.AspNetCore
                     }
                     catch (Exception ex)
                     {
-                        throw new CertificateConfigurationException(ex);
+                        throw new InvalidOperationException("For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", ex);
                     }
 
                     listenOptions.UseHttps(certificate);
