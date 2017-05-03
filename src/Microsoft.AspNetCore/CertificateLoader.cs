@@ -163,7 +163,7 @@ namespace Microsoft.AspNetCore
 
                 if (error != null)
                 {
-                    throw new InvalidOperationException($"Unable to load certificate from file '{Path}'. Error details: '{error.Message}'.");
+                    throw new InvalidOperationException($"Unable to load certificate from file '{Path}'. Error details: '{error.Message}'.", error);
                 }
 
                 return certificate;
