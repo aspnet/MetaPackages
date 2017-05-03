@@ -24,7 +24,7 @@ namespace Microsoft.AspNetCore
         /// Creates a new instance of <see cref="CertificateLoader"/>.
         /// </summary>
         public CertificateLoader()
-            : this(null, new CertificateFileLoader(), new CertificateStoreLoader(), null)
+            : this(null, null, new CertificateFileLoader(), new CertificateStoreLoader())
         {
         }
 
@@ -33,7 +33,7 @@ namespace Microsoft.AspNetCore
         /// </summary>
         /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance.</param>
         public CertificateLoader(ILoggerFactory loggerFactory)
-            : this(null, new CertificateFileLoader(), new CertificateStoreLoader(), loggerFactory)
+            : this(null, loggerFactory, new CertificateFileLoader(), new CertificateStoreLoader())
         {
             if (loggerFactory == null)
             {
@@ -47,7 +47,7 @@ namespace Microsoft.AspNetCore
         /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates. May be null.</param>
         /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance. May be null.</param>
         public CertificateLoader(IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory)
-            : this(certificatesConfiguration, new CertificateFileLoader(), new CertificateStoreLoader(), loggerFactory)
+            : this(certificatesConfiguration, loggerFactory, new CertificateFileLoader(), new CertificateStoreLoader())
         {
             if (loggerFactory == null)
             {
@@ -59,9 +59,9 @@ namespace Microsoft.AspNetCore
 
         internal CertificateLoader(
             IConfiguration certificatesConfiguration,
+            ILoggerFactory loggerFactory,
             ICertificateFileLoader certificateFileLoader,
-            ICertificateStoreLoader certificateStoreLoader,
-            ILoggerFactory loggerFactory)
+            ICertificateStoreLoader certificateStoreLoader)
         {
             _certificatesConfiguration = certificatesConfiguration;
             _certificateFileLoader = certificateFileLoader;
