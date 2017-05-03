@@ -65,7 +65,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateStoreLoader>());
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal("No certificate named Certificate2 found in configuration", exception.Message);
+            Assert.Equal("No certificate named 'Certificate2' found in configuration for the current environment. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateStoreLoader>());
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal($"Failed to load certificate from file 'Certificate1.pfx': {nameof(Throws_SingleCertificateName_File_FileNotFound)}", exception.Message);
+            Assert.Equal($"Unable to load certificate from file 'Certificate1.pfx'. Error details: '{nameof(Throws_SingleCertificateName_File_FileNotFound)}'. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Fact]
@@ -147,7 +147,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateStoreLoader>());
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal("No certificate named Certificate2 found in configuration", exception.Message);
+            Assert.Equal("No certificate named 'Certificate2' found in configuration for the current environment. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Fact]
@@ -256,7 +256,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateStoreLoader>());
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal("No certificate named NotFound found in configuration", exception.Message);
+            Assert.Equal("No certificate named 'NotFound' found in configuration for the current environment. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Theory]
@@ -293,7 +293,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateStoreLoader>());
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal($"Failed to load certificate from file 'Certificate2.pfx': {nameof(Throws_MultipleCertificateNames_File_FileNotFound)}", exception.Message);
+            Assert.Equal($"Unable to load certificate from file 'Certificate2.pfx'. Error details: '{nameof(Throws_MultipleCertificateNames_File_FileNotFound)}'. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Fact]
@@ -377,7 +377,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 certificateStoreLoader.Object);
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal("No certificate named NotFound found in configuration", exception.Message);
+            Assert.Equal("No certificate named 'NotFound' found in configuration for the current environment. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Theory]
@@ -509,7 +509,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 certificateStoreLoader.Object);
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal("No certificate named NotFound found in configuration", exception.Message);
+            Assert.Equal("No certificate named 'NotFound' found in configuration for the current environment. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Theory]
@@ -549,7 +549,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 certificateStoreLoader.Object);
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal($"Failed to load certificate from file 'Certificate1.pfx': {nameof(Throws_MultipleCertificateNames_FileAndStore_FileNotFound)}", exception.Message);
+            Assert.Equal($"Unable to load certificate from file 'Certificate1.pfx'. Error details: '{nameof(Throws_MultipleCertificateNames_FileAndStore_FileNotFound)}'. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Theory]
@@ -648,7 +648,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateStoreLoader>());
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificate")));
-            Assert.Equal($"Failed to load certificate from file 'Certificate1.pfx': {nameof(Throws_SingleCertificateInline_FileNotFound)}", exception.Message);
+            Assert.Equal($"Unable to load certificate from file 'Certificate1.pfx'. Error details: '{nameof(Throws_SingleCertificateInline_FileNotFound)}'. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
             certificateFileLoader.VerifyAll();
         }
 
@@ -777,7 +777,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 Mock.Of<ICertificateStoreLoader>());
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificates")));
-            Assert.Equal($"Failed to load certificate from file 'Certificate2.pfx': {nameof(Throws_MultipleCertificatesInline_File_FileNotFound)}", exception.Message);
+            Assert.Equal($"Unable to load certificate from file 'Certificate2.pfx'. Error details: '{nameof(Throws_MultipleCertificatesInline_File_FileNotFound)}'. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Fact]
@@ -953,7 +953,7 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 certificateStoreLoader.Object);
 
             var exception = Assert.Throws<CertificateConfigurationException>(() => certificateLoader.Load(configuration.GetSection("TestConfig:Certificates")));
-            Assert.Equal($"Failed to load certificate from file 'Certificate1.pfx': {nameof(Throws_MultipleCertificatesInline_FileAndStore_FileNotFound)}", exception.Message);
+            Assert.Equal($"Unable to load certificate from file 'Certificate1.pfx'. Error details: '{nameof(Throws_MultipleCertificatesInline_FileAndStore_FileNotFound)}'. For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", exception.Message);
         }
 
         [Fact]

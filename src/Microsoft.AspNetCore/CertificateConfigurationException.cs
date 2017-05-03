@@ -8,7 +8,7 @@ namespace Microsoft.AspNetCore
     internal class CertificateConfigurationException : Exception
     {
         public CertificateConfigurationException(string message)
-            : base(message + ". For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.")
+            : base($"{message} For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.")
         {
         }
     }
