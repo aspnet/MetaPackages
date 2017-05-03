@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore
@@ -15,10 +16,12 @@ namespace Microsoft.AspNetCore
     internal class KestrelServerOptionsSetup : IConfigureOptions<KestrelServerOptions>
     {
         private readonly IConfiguration _configurationRoot;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public KestrelServerOptionsSetup(IConfiguration configurationRoot)
+        public KestrelServerOptionsSetup(IConfiguration configurationRoot, ILoggerFactory loggerFactory)
         {
             _configurationRoot = configurationRoot;
+            _loggerFactory = loggerFactory;
         }
 
         public void Configure(KestrelServerOptions options)
@@ -28,7 +31,7 @@ namespace Microsoft.AspNetCore
 
         private void BindConfiguration(KestrelServerOptions options)
         {
-            var certificateLoader = new CertificateLoader(_configurationRoot.GetSection("Certificates"));
+            var certificateLoader = new CertificateLoader(_configurationRoot.GetSection("Certificates"), _loggerFactory);
 
             foreach (var endPoint in _configurationRoot.GetSection("Kestrel:EndPoints").GetChildren())
             {

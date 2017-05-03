@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace Microsoft.AspNetCore
 {
@@ -17,30 +18,55 @@ namespace Microsoft.AspNetCore
         private readonly IConfiguration _certificatesConfiguration;
         private readonly ICertificateFileLoader _certificateFileLoader;
         private readonly ICertificateStoreLoader _certificateStoreLoader;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Creates a new instance of <see cref="CertificateLoader"/>.
         /// </summary>
         public CertificateLoader()
-            : this(null)
+            : this(null, new CertificateFileLoader(), new CertificateStoreLoader(), null)
         {
+        }
+
+        /// <summary>
+        /// Creates a new instance of <see cref="CertificateLoader"/>.
+        /// </summary>
+        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance.</param>
+        public CertificateLoader(ILoggerFactory loggerFactory)
+            : this(null, new CertificateFileLoader(), new CertificateStoreLoader(), loggerFactory)
+        {
+            if (loggerFactory == null)
+            {
+                throw new ArgumentNullException(nameof(loggerFactory));
+            }
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificate references from configuration.
         /// </summary>
-        /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
-        public CertificateLoader(IConfiguration certificatesConfiguration)
-            : this(certificatesConfiguration, new CertificateFileLoader(), new CertificateStoreLoader())
+        /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates. May be null.</param>
+        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance. May be null.</param>
+        public CertificateLoader(IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory)
+            : this(certificatesConfiguration, new CertificateFileLoader(), new CertificateStoreLoader(), loggerFactory)
         {
-            _certificatesConfiguration = certificatesConfiguration;
+            if (loggerFactory == null)
+            {
+                throw new ArgumentNullException(nameof(loggerFactory));
+            }
+
+            _certificatesConfiguration = certificatesConfiguration ?? throw new ArgumentNullException(nameof(certificatesConfiguration));
         }
 
-        internal CertificateLoader(IConfiguration certificatesConfiguration, ICertificateFileLoader certificateFileLoader, ICertificateStoreLoader certificateStoreLoader)
+        internal CertificateLoader(
+            IConfiguration certificatesConfiguration,
+            ICertificateFileLoader certificateFileLoader,
+            ICertificateStoreLoader certificateStoreLoader,
+            ILoggerFactory loggerFactory)
         {
             _certificatesConfiguration = certificatesConfiguration;
             _certificateFileLoader = certificateFileLoader;
             _certificateStoreLoader = certificateStoreLoader;
+            _logger = loggerFactory?.CreateLogger("Microsoft.AspNetCore.CertificateLoader");
         }
 
         /// <summary>
@@ -116,7 +142,7 @@ namespace Microsoft.AspNetCore
                     certificateSource = new CertificateFileSource(_certificateFileLoader);
                     break;
                 case "store":
-                    certificateSource = new CertificateStoreSource(_certificateStoreLoader);
+                    certificateSource = new CertificateStoreSource(_certificateStoreLoader, _logger);
                     break;
                 default:
                     throw new InvalidOperationException($"Invalid certificate source kind '{sourceKind}'.");
@@ -188,10 +214,12 @@ namespace Microsoft.AspNetCore
         private class CertificateStoreSource : CertificateSource
         {
             private readonly ICertificateStoreLoader _certificateStoreLoader;
+            private readonly ILogger _logger;
 
-            public CertificateStoreSource(ICertificateStoreLoader certificateStoreLoader)
+            public CertificateStoreSource(ICertificateStoreLoader certificateStoreLoader, ILogger logger)
             {
                 _certificateStoreLoader = certificateStoreLoader;
+                _logger = logger;
             }
 
             public string Subject { get; set; }
@@ -206,7 +234,14 @@ namespace Microsoft.AspNetCore
                     throw new InvalidOperationException($"The certificate store location '{StoreLocation}' is invalid.");
                 }
 
-                return _certificateStoreLoader.Load(Subject, StoreName, storeLocation, !AllowInvalid);
+                var certificate = _certificateStoreLoader.Load(Subject, StoreName, storeLocation, !AllowInvalid);
+
+                if (certificate == null)
+                {
+                    _logger?.LogWarning($"Unable to find a matching certificate for subject '{Subject}' in store '{StoreName}' in '{StoreLocation}'.");
+                }
+
+                return certificate;
             }
         }
     }
