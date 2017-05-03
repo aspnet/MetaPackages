@@ -15,8 +15,8 @@ namespace Microsoft.AspNetCore
     /// </summary>
     public class CertificateLoader
     {
-        private readonly string _environmentName;
         private readonly IConfiguration _certificatesConfiguration;
+        private readonly string _environmentName;
         private readonly ICertificateFileLoader _certificateFileLoader;
         private readonly ICertificateStoreLoader _certificateStoreLoader;
         private readonly ILogger _logger;
@@ -26,7 +26,7 @@ namespace Microsoft.AspNetCore
         /// </summary>
         /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
         public CertificateLoader(IConfiguration certificatesConfiguration)
-            : this(null, certificatesConfiguration, null)
+            : this(certificatesConfiguration, null, null)
         {
         }
 
@@ -36,25 +36,25 @@ namespace Microsoft.AspNetCore
         /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
         /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance..</param>
         public CertificateLoader(IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory)
-            : this(null, certificatesConfiguration, loggerFactory)
+            : this(certificatesConfiguration, loggerFactory, null)
         {
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificate references from configuration.
         /// </summary>
-        /// <param name="environmentName">The name of the environment the application is running in.</param>
         /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
         /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance..</param>
-        public CertificateLoader(string environmentName, IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory)
-            : this(environmentName, certificatesConfiguration, loggerFactory, new CertificateFileLoader(), new CertificateStoreLoader())
+        /// <param name="environmentName">The name of the environment the application is running in.</param>
+        public CertificateLoader(IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory, string environmentName)
+            : this(certificatesConfiguration, loggerFactory, environmentName, new CertificateFileLoader(), new CertificateStoreLoader())
         {
         }
 
         internal CertificateLoader(
-            string environmentName,
             IConfiguration certificatesConfiguration,
             ILoggerFactory loggerFactory,
+            string environmentName,
             ICertificateFileLoader certificateFileLoader,
             ICertificateStoreLoader certificateStoreLoader)
         {

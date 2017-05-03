@@ -36,7 +36,7 @@ namespace Microsoft.AspNetCore
 
         private void BindConfiguration(KestrelServerOptions options)
         {
-            var certificateLoader = new CertificateLoader(_hostingEnvironment.EnvironmentName, _configurationRoot.GetSection("Certificates"), _loggerFactory);
+            var certificateLoader = new CertificateLoader(_configurationRoot.GetSection("Certificates"), _loggerFactory, _hostingEnvironment.EnvironmentName);
 
             foreach (var endPoint in _configurationRoot.GetSection("Kestrel:EndPoints").GetChildren())
             {

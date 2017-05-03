@@ -35,8 +35,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(certificate);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
@@ -58,8 +58,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Build();
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 Mock.Of<ICertificateFileLoader>(),
                 Mock.Of<ICertificateStoreLoader>());
@@ -87,8 +87,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Callback(() => throw new Exception(nameof(Throws_SingleCertificateName_File_FileLoadError)));
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
@@ -119,8 +119,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(certificate);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 Mock.Of<ICertificateFileLoader>(),
                 certificateStoreLoader.Object);
@@ -151,8 +151,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns<X509Certificate2>(null);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 Mock.Of<ICertificateFileLoader>(),
                 certificateStoreLoader.Object);
@@ -190,8 +190,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(certificate2);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
@@ -232,8 +232,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Throws(new Exception(nameof(Throws_MultipleCertificateNames_File_FileLoadError)));
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 certificateFileLoader.Object,
                 Mock.Of<ICertificateStoreLoader>());
@@ -272,8 +272,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(certificate2);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 Mock.Of<ICertificateFileLoader>(),
                 certificateStoreLoader.Object);
@@ -324,8 +324,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns<X509Certificate2>(null);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 Mock.Of<ICertificateFileLoader>(),
                 certificateStoreLoader.Object);
@@ -365,8 +365,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(storeCertificate);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 certificateFileLoader.Object,
                 certificateStoreLoader.Object);
@@ -413,8 +413,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(storeCertificate);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 certificateFileLoader.Object,
                 certificateStoreLoader.Object);
@@ -455,8 +455,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns(storeCertificate);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 certificateFileLoader.Object,
                 certificateStoreLoader.Object);
@@ -497,8 +497,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Returns<X509Certificate2>(null);
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 certificateFileLoader.Object,
                 certificateStoreLoader.Object);
@@ -944,9 +944,9 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Build();
 
             var certificateLoader = new CertificateLoader(
-                environmentName,
                 configuration.GetSection("Certificates"),
                 null,
+                environmentName,
                 Mock.Of<ICertificateFileLoader>(),
                 Mock.Of<ICertificateStoreLoader>());
 
@@ -965,8 +965,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
                 .Build();
 
             var certificateLoader = new CertificateLoader(
-                null,
                 configuration.GetSection("Certificates"),
+                null,
                 null,
                 Mock.Of<ICertificateFileLoader>(),
                 Mock.Of<ICertificateStoreLoader>());
@@ -997,8 +997,8 @@ namespace Microsoft.AspNetCore.FunctionalTests
 
             var certificateLoader = new CertificateLoader(
                 null,
-                null,
                 loggerFactory.Object,
+                null,
                 Mock.Of<ICertificateFileLoader>(),
                 Mock.Of<ICertificateStoreLoader>());
 
