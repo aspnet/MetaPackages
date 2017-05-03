@@ -15,11 +15,16 @@ namespace Microsoft.AspNetCore
 {
     internal class KestrelServerOptionsSetup : IConfigureOptions<KestrelServerOptions>
     {
+        private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IConfiguration _configurationRoot;
         private readonly ILoggerFactory _loggerFactory;
 
-        public KestrelServerOptionsSetup(IConfiguration configurationRoot, ILoggerFactory loggerFactory)
+        public KestrelServerOptionsSetup(
+            IHostingEnvironment hostingEnvironment,
+            IConfiguration configurationRoot,
+            ILoggerFactory loggerFactory)
         {
+            _hostingEnvironment = hostingEnvironment;
             _configurationRoot = configurationRoot;
             _loggerFactory = loggerFactory;
         }
@@ -31,7 +36,7 @@ namespace Microsoft.AspNetCore
 
         private void BindConfiguration(KestrelServerOptions options)
         {
-            var certificateLoader = new CertificateLoader(_configurationRoot.GetSection("Certificates"), _loggerFactory);
+            var certificateLoader = new CertificateLoader(_hostingEnvironment.EnvironmentName, _configurationRoot.GetSection("Certificates"), _loggerFactory);
 
             foreach (var endPoint in _configurationRoot.GetSection("Kestrel:EndPoints").GetChildren())
             {
@@ -70,7 +75,7 @@ namespace Microsoft.AspNetCore
 
                         if (certificate == null)
                         {
-                            throw new InvalidOperationException($"Unable to load certificate for endpoint '{endPoint.Key}'.");
+                            throw new InvalidOperationException($"No certificate found for endpoint '{endPoint.Key}'.");
                         }
                     }
                     catch (Exception ex)

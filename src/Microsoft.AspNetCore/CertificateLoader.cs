@@ -15,54 +15,50 @@ namespace Microsoft.AspNetCore
     /// </summary>
     public class CertificateLoader
     {
+        private readonly string _environmentName;
         private readonly IConfiguration _certificatesConfiguration;
         private readonly ICertificateFileLoader _certificateFileLoader;
         private readonly ICertificateStoreLoader _certificateStoreLoader;
         private readonly ILogger _logger;
 
         /// <summary>
-        /// Creates a new instance of <see cref="CertificateLoader"/>.
+        /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificate references from configuration.
         /// </summary>
-        public CertificateLoader()
-            : this(null, null, new CertificateFileLoader(), new CertificateStoreLoader())
+        /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
+        public CertificateLoader(IConfiguration certificatesConfiguration)
+            : this(null, certificatesConfiguration, null)
         {
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="CertificateLoader"/>.
-        /// </summary>
-        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance.</param>
-        public CertificateLoader(ILoggerFactory loggerFactory)
-            : this(null, loggerFactory, new CertificateFileLoader(), new CertificateStoreLoader())
-        {
-            if (loggerFactory == null)
-            {
-                throw new ArgumentNullException(nameof(loggerFactory));
-            }
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificate references from configuration.
         /// </summary>
-        /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates. May be null.</param>
-        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance. May be null.</param>
+        /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
+        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance..</param>
         public CertificateLoader(IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory)
-            : this(certificatesConfiguration, loggerFactory, new CertificateFileLoader(), new CertificateStoreLoader())
+            : this(null, certificatesConfiguration, loggerFactory)
         {
-            if (loggerFactory == null)
-            {
-                throw new ArgumentNullException(nameof(loggerFactory));
-            }
+        }
 
-            _certificatesConfiguration = certificatesConfiguration ?? throw new ArgumentNullException(nameof(certificatesConfiguration));
+        /// <summary>
+        /// Creates a new instance of <see cref="CertificateLoader"/> that can load certificate references from configuration.
+        /// </summary>
+        /// <param name="environmentName">The name of the environment the application is running in.</param>
+        /// <param name="certificatesConfiguration">An <see cref="IConfiguration"/> with information about certificates.</param>
+        /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance..</param>
+        public CertificateLoader(string environmentName, IConfiguration certificatesConfiguration, ILoggerFactory loggerFactory)
+            : this(environmentName, certificatesConfiguration, loggerFactory, new CertificateFileLoader(), new CertificateStoreLoader())
+        {
         }
 
         internal CertificateLoader(
+            string environmentName,
             IConfiguration certificatesConfiguration,
             ILoggerFactory loggerFactory,
             ICertificateFileLoader certificateFileLoader,
             ICertificateStoreLoader certificateStoreLoader)
         {
+            _environmentName = environmentName;
             _certificatesConfiguration = certificatesConfiguration;
             _certificateFileLoader = certificateFileLoader;
             _certificateStoreLoader = certificateStoreLoader;
@@ -125,7 +121,8 @@ namespace Microsoft.AspNetCore
 
             if (!certificateConfiguration.Exists())
             {
-                throw new KeyNotFoundException($"No certificate named '{certificateName}' found in configuration for the current environment.");
+                var environmentName = _environmentName != null ? $" ({_environmentName})" : "";
+                throw new KeyNotFoundException($"No certificate named '{certificateName}' found in configuration for the current environment{environmentName}.");
             }
 
             return LoadSingle(certificateConfiguration);
