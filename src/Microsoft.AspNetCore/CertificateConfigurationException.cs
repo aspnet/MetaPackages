@@ -7,8 +7,8 @@ namespace Microsoft.AspNetCore
 {
     internal class CertificateConfigurationException : Exception
     {
-        public CertificateConfigurationException(string message)
-            : base($"{message} For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.")
+        public CertificateConfigurationException(Exception innerException)
+            : base($"{innerException.Message} For information on configuring HTTPS see https://go.microsoft.com/fwlink/?linkid=848054.", innerException)
         {
         }
     }

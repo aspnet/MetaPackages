@@ -4,6 +4,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
@@ -56,14 +57,22 @@ namespace Microsoft.AspNetCore
             options.Listen(address, port, listenOptions =>
             {
                 var certificateConfig = endPoint.GetSection("Certificate");
+                X509Certificate2 certificate;
 
                 if (certificateConfig.Exists())
                 {
-                    var certificate = certificateLoader.Load(certificateConfig).FirstOrDefault();
-
-                    if (certificate == null)
+                    try
                     {
-                        throw new CertificateConfigurationException($"Unable to load certificate for endpoint '{endPoint.Key}'.");
+                        certificate = certificateLoader.Load(certificateConfig).FirstOrDefault();
+
+                        if (certificate == null)
+                        {
+                            throw new InvalidOperationException($"Unable to load certificate for endpoint '{endPoint.Key}'.");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new CertificateConfigurationException(ex);
                     }
 
                     listenOptions.UseHttps(certificate);
