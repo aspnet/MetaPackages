@@ -31,8 +31,15 @@ namespace CreateDefaultBuilderApp
                 {
                     app.Run(context =>
                     {
-                        context.RequestServices.GetService<IService<IAnotherService>>();
-                        return context.Response.WriteAsync("Success");
+                        try
+                        {
+                            context.RequestServices.GetService<IService<IAnotherService>>();
+                            return context.Response.WriteAsync("Success");
+                        }
+                        catch (Exception ex)
+                        {
+                            return context.Response.WriteAsync(ex.ToString());
+                        }
                     });
                 })
                 .Build().Run();
