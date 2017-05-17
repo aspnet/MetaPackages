@@ -31,10 +31,12 @@ namespace Microsoft.AspNetCore.Tests
             var services = new ServiceCollection()
                 .AddSingleton<IConfiguration>(config)
                 .AddOptions()
+                .ConfigureAspNetCoreDefaults();
             var sp = services.BuildServiceProvider();
 
             var options = sp.GetRequiredService<IOptions<IntegratedWebClientOptions>>().Value;
             Assert.Equal("<id>", options.ClientId);
+            Assert.Equal("urn:self:aspnet:identity:integrated", options.TokenRedirectUrn);
         }
 
         [Fact]
