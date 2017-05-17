@@ -106,11 +106,17 @@ namespace Microsoft.AspNetCore.Tests
             {
                 File.WriteAllText("appsettings.json", @"
 {
-    ""Kestrel"": {
-        ""EndPoints"": {
-            ""EndPoint"": {
-                ""Address"": """ + endPointAddress + @""",
-                ""Port"": 0
+    ""Microsoft"": {
+        ""AspNetCore"": {
+            ""Hosting"": {
+                ""Kestrel"": {
+                    ""EndPoints"": {
+                        ""EndPoint"": {
+                            ""Address"": """ + endPointAddress + @""",
+                            ""Port"": 0
+                        }
+                    }
+                }
             }
         }
     }
@@ -142,12 +148,18 @@ namespace Microsoft.AspNetCore.Tests
             {
                 File.WriteAllText("appsettings.json", @"
 {
-    ""Kestrel"": {
-        ""EndPoints"": {
-            ""EndPoint"": {
-                ""Address"": ""127.0.0.1"",
-                ""Port"": 0,
-                ""Certificate"": ""TestCert""
+    ""Microsoft"": {
+        ""AspNetCore"": {
+            ""Hosting"": {
+                ""Kestrel"": {
+                    ""EndPoints"": {
+                        ""EndPoint"": {
+                            ""Address"": ""127.0.0.1"",
+                            ""Port"": 0,
+                            ""Certificate"": ""TestCert""
+                        }
+                    }
+                }
             }
         }
     },
@@ -181,15 +193,21 @@ namespace Microsoft.AspNetCore.Tests
             {
                 File.WriteAllText("appsettings.json", @"
 {
-    ""Kestrel"": {
-        ""EndPoints"": {
-            ""EndPoint"": {
-                ""Address"": ""127.0.0.1"",
-                ""Port"": 0,
-                ""Certificate"": {
-                    ""Source"": ""File"",
-                    ""Path"": ""testCert.pfx"",
-                    ""Password"": ""testPassword""
+    ""Microsoft"": {
+        ""AspNetCore"": {
+            ""Hosting"": {
+                ""Kestrel"": {
+                    ""EndPoints"": {
+                        ""EndPoint"": {
+                            ""Address"": ""127.0.0.1"",
+                            ""Port"": 0,
+                            ""Certificate"": {
+                                ""Source"": ""File"",
+                                ""Path"": ""testCert.pfx"",
+                                ""Password"": ""testPassword""
+                            }
+                        }
+                    }
                 }
             }
         }

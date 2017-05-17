@@ -38,7 +38,7 @@ namespace Microsoft.AspNetCore
         {
             var certificateLoader = new CertificateLoader(_configurationRoot.GetSection("Certificates"), _loggerFactory, _hostingEnvironment.EnvironmentName);
 
-            foreach (var endPoint in _configurationRoot.GetSection("Kestrel:EndPoints").GetChildren())
+            foreach (var endPoint in _configurationRoot.GetSection(AspNetCoreExtensions.HostingSection+"Kestrel:EndPoints").GetChildren())
             {
                 BindEndPoint(options, endPoint, certificateLoader);
             }

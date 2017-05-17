@@ -55,8 +55,15 @@
   </ItemDefinitionGroup>
 
   <ItemGroup>
+    <MetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" />
+    <MetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+    <MetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
+    <MetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" />
+    <MetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
+    <MetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Diagnostics" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Hosting" />
+    <MetaPackagePackageReference Include="Microsoft.AspNetCore.Identity" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Routing" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Server.Kestrel" />
@@ -79,13 +86,7 @@
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Abstractions" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Core" />
-    <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" />
-    <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
-    <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" />
-    <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" />
-    <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" />
-    <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Authorization" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.CookiePolicy" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Cors" />
@@ -106,7 +107,6 @@
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Http.Extensions" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Http.Features" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.HttpOverrides" />
-    <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.Service" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.Service.Core" />
