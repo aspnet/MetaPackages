@@ -64,6 +64,7 @@
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Diagnostics" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Hosting" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Identity" />
+    <MetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.Service.IntegratedWebClient" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Routing" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" />
     <MetaPackagePackageReference Include="Microsoft.AspNetCore.Server.Kestrel" />
@@ -112,7 +113,6 @@
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.Service.Core" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.Service.Abstractions" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.Service.EntityFrameworkCore" />
-    <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.Service.IntegratedWebClient" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Identity.Service.Mvc" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.JsonPatch" />
     <FullMetaPackagePackageReference Include="Microsoft.AspNetCore.Localization" />

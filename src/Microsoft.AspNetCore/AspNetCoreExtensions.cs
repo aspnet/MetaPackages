@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity.Service.IntegratedWebClient;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +24,8 @@ namespace Microsoft.AspNetCore
         // REVIEW: consider making these public?
         internal static readonly string MicrosoftSection = "Microsoft:";
         internal static readonly string AspNetCoreSection = MicrosoftSection + "AspNetCore:";
-        internal static readonly string AuthenticationSchemesSection = AspNetCoreSection + "Authentication:Schemes:";
+        internal static readonly string AuthenticationSection = AspNetCoreSection + "Authentication:";
+        internal static readonly string AuthenticationSchemesSection = AuthenticationSection + "Schemes:";
         internal static readonly string HostingSection = AspNetCoreSection + "Hosting:";
 
         /// <summary>
@@ -41,6 +43,7 @@ namespace Microsoft.AspNetCore
             services.AddTransient<IConfigureOptions<MicrosoftAccountOptions>, MicrosoftAccountOptionsSetup>();
             services.AddTransient<IConfigureOptions<OpenIdConnectOptions>, OpenIdConnectOptionsSetup>();
             services.AddTransient<IConfigureOptions<TwitterOptions>, TwitterOptionsSetup>();
+            services.AddTransient<IConfigureOptions<IntegratedWebClientOptions>, IntegratedWebClientOptionsSetup>();
             return services;
         }
 
@@ -96,6 +99,13 @@ namespace Microsoft.AspNetCore
             public TwitterOptionsSetup(IConfiguration config) :
                 base(TwitterDefaults.AuthenticationScheme,
                     options => config.GetSection(AuthenticationSchemesSection + TwitterDefaults.AuthenticationScheme).Bind(options))
+            { }
+        }
+
+        private class IntegratedWebClientOptionsSetup : ConfigureOptions<IntegratedWebClientOptions>
+        {
+            public IntegratedWebClientOptionsSetup(IConfiguration config) :
+                base(options => config.GetSection(AuthenticationSection + "IdentityService").Bind(options))
             { }
         }
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using Microsoft.AspNetCore.Identity.Service.IntegratedWebClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -13,7 +14,28 @@ namespace Microsoft.AspNetCore.Tests
 {
     public class ConfigurationTests
     {
+        private const string AuthenticationSection = "Microsoft:AspNetCore:Authentication:";
         private const string AuthenticationSchemesSection = "Microsoft:AspNetCore:Authentication:Schemes:";
+
+        [Fact]
+        public void IntegratedWebClientCanBindAgainstDefaultConfig()
+        {
+            var dic = new Dictionary<string, string>
+            {
+                { AuthenticationSection + "IdentityService:ClientId", "<id>"},
+                { AuthenticationSection + "IdentityService:TokenRedirectUrn", "urn:self:aspnet:identity:integrated"},
+            };
+            var configurationBuilder = new ConfigurationBuilder();
+            configurationBuilder.AddInMemoryCollection(dic);
+            var config = configurationBuilder.Build();
+            var services = new ServiceCollection()
+                .AddSingleton<IConfiguration>(config)
+                .AddOptions()
+            var sp = services.BuildServiceProvider();
+
+            var options = sp.GetRequiredService<IOptions<IntegratedWebClientOptions>>().Value;
+            Assert.Equal("<id>", options.ClientId);
+        }
 
         [Fact]
         public void FacebookCanBindAgainstDefaultConfig()
