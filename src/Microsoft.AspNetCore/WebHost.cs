@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options.Infrastructure;
 
 namespace Microsoft.AspNetCore
 {
@@ -188,7 +188,7 @@ namespace Microsoft.AspNetCore
                 })
                 .ConfigureServices(services =>
                 {
-                    services.AddTransient<IConfigureOptions<KestrelServerOptions>, KestrelServerOptionsSetup>();
+                    services.AddTransient<ConfigureDefaultOptions<KestrelServerOptions>, KestrelServerOptionsSetup>();
                 });
 
             return builder;

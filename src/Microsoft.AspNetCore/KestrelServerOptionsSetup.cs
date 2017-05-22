@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options.Infrastructure;
 
 namespace Microsoft.AspNetCore
 {
-    internal class KestrelServerOptionsSetup : IConfigureOptions<KestrelServerOptions>
+    internal class KestrelServerOptionsSetup : ConfigureDefaultOptions<KestrelServerOptions>
     {
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IConfiguration _configurationRoot;
@@ -29,7 +29,7 @@ namespace Microsoft.AspNetCore
             _loggerFactory = loggerFactory;
         }
 
-        public void Configure(KestrelServerOptions options)
+        public override void Configure(string name, KestrelServerOptions options)
         {
             BindConfiguration(options);
         }
