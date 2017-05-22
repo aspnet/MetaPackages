@@ -18,7 +18,7 @@ namespace Microsoft.AspNetCore
     public static class AspNetCoreExtensions
     {
         /// <summary>
-        /// Enables features to uses the default configuration to extablish defaults for their options.
+        /// Allows features to do some default setup for their options, i.e. binding against the default configuration.
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to modify.</param>
         /// <returns>The service collection.</returns>
