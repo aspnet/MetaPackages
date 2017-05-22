@@ -46,7 +46,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrimDeps", "tools\TrimDeps\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependencyInjectionApp", "test\TestSites\DependencyInjectionApp\DependencyInjectionApp.csproj", "{65FE2E38-4529-4C93-A7B0-CF12DD7A70C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AspNetCore.Tests", "test\Microsoft.AspNetCore.Tests\Microsoft.AspNetCore.Tests.csproj", "{914D3FAD-8B94-4353-B24F-B264F675481C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Microsoft.AspNetCore.All.Tests", "test\Microsoft.AspNetCore.All.Tests\Microsoft.AspNetCore.All.Tests.csproj", "{914D3FAD-8B94-4353-B24F-B264F675481C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
