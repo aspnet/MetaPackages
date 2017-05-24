@@ -1,5 +1,15 @@
 $ErrorActionPreference = "Stop"
 
+$RepositoryRoot = Convert-Path (Get-Location)
+$ToolsRoot = Join-Path $PSScriptRoot "tools"
+
+function EnsureNuGetExe() {
+    $nugetExePath = Join-Path $ToolsRoot "NuGet.exe"
+    if (!(Test-Path $nugetExePath)) {
+        Invoke-WebRequest 'https://dist.nuget.org/win-x86-commandline/v3.4.4/NuGet.exe' -OutFile $nugetExePath
+    }
+}
+
 function DownloadWithRetry([string] $url, [string] $downloadLocation, [int] $retries)
 {
     while($true)
@@ -63,5 +73,7 @@ if (!(Test-Path $buildFolder)) {
         Remove-Item -Recurse -Force $tempFolder
     }
 }
+
+EnsureNuGetExe
 
 &"$buildFile" @args

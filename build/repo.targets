@@ -204,5 +204,17 @@
     </ItemGroup>
 
     <ZipArchive File="%(MetaPackageNupkg.FullPath)" SourceFiles="@(ArchiveFiles)" WorkingDirectory="@(MetaPackageNupkg->'$(TempDir)%(Filename)')" Overwrite="true" />
+
+    <PropertyGroup>
+      <TempPackageDir>$(TempDir)package\</TempPackageDir>
+      <PackagePublisherBinary>$(ToolsDir)\PackagePublisher\PackagePublisher.dll</PackagePublisherBinary>
+      <BuildToolsFeed>https://dotnet.myget.org/F/aspnetcore-tools/api/v2</BuildToolsFeed>
+      <PublishFeed>https://dotnet.myget.org/F/aspnetcore-ci-dev/</PublishFeed>
+    </PropertyGroup>
+
+    <Copy SourceFiles="%(MetaPackageNupkg.FullPath)" DestinationFolder="$(TempPackageDir)" />
+    <Exec Command="$(ToolsDir)NuGet.exe install -ExcludeVersion -pre PackagePublisher -Source $(BuildToolsFeed) -out $(ToolsDir)"/>
+    <Exec Command="dotnet $(PackagePublisherBinary) -d $(TempPackageDir) -f $(PublishFeed)" />
+
   </Target>
 </Project>
