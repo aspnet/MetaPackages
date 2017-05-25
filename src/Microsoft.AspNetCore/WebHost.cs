@@ -169,11 +169,6 @@ namespace Microsoft.AspNetCore
                     }
 
                     config.AddEnvironmentVariables();
-
-                    if (args != null)
-                    {
-                        config.AddCommandLine(args);
-                    }
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
@@ -190,6 +185,11 @@ namespace Microsoft.AspNetCore
                 {
                     services.AddTransient<IConfigureOptions<KestrelServerOptions>, KestrelServerOptionsSetup>();
                 });
+
+            if (args != null)
+            {
+                builder.ConfigureAppConfiguration((context, config) => config.AddCommandLine(args));
+            }
 
             return builder;
         }
