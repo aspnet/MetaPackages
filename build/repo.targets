@@ -31,6 +31,10 @@
     </PrepareDependsOn>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="PackagePublisher" Version="1.0.2-*" />
+  </ItemGroup>
+
   <Target Name="UpdateNuGetConfig">
     <UpdatePackageSource
       NuGetConfigPath="$(RepositoryRoot)NuGet.config"
@@ -185,7 +189,7 @@
     <Copy SourceFiles="$(RepositoryRoot)artifacts\nuGetPackagesArchive.timestamped.lzma;$(RepositoryRoot)artifacts\nuGetPackagesArchive.notimestamp.lzma" DestinationFolder="$(PublishDir)" Condition="'$(PublishDir)' != ''" />
   </Target>
 
-  <Target Name="AddManifestsToNupkg">
+  <Target Name="AddManifestsToNupkg" DependsOnTargets="RunResolvePackageDependencies">
     <Error Text="COHERENCE_DROP_LOCATION is not specified. This requires a path like \\aspnetci\drops\Coherence\{branch}\{build-number}"
         Condition=" '$(COHERENCE_DROP_LOCATION)' == '' " />
 
@@ -205,16 +209,18 @@
 
     <ZipArchive File="%(MetaPackageNupkg.FullPath)" SourceFiles="@(ArchiveFiles)" WorkingDirectory="@(MetaPackageNupkg->'$(TempDir)%(Filename)')" Overwrite="true" />
 
+    <ItemGroup>
+      <PackagePublisherPath Include="%(PackageDefinitions.ResolvedPath)" Condition="'%(PackageDefinitions.Name)'=='PackagePublisher'" />
+    </ItemGroup>
+
     <PropertyGroup>
       <TempPackageDir>$(TempDir)package\</TempPackageDir>
-      <PackagePublisherBinary>$(ToolsDir)\PackagePublisher\PackagePublisher.dll</PackagePublisherBinary>
-      <BuildToolsFeed>https://dotnet.myget.org/F/aspnetcore-tools/api/v2</BuildToolsFeed>
+      <_PackagePublisherPath>@(PackagePublisherPath)\PackagePublisher.exe</_PackagePublisherPath>
       <PublishFeed>https://dotnet.myget.org/F/aspnetcore-ci-dev/</PublishFeed>
     </PropertyGroup>
 
     <Copy SourceFiles="%(MetaPackageNupkg.FullPath)" DestinationFolder="$(TempPackageDir)" />
-    <Exec Command="$(ToolsDir)NuGet.exe install -ExcludeVersion -pre PackagePublisher -Source $(BuildToolsFeed) -out $(ToolsDir)"/>
-    <Exec Command="dotnet $(PackagePublisherBinary) -d $(TempPackageDir) -f $(PublishFeed)" />
+    <Exec Command="$(_PackagePublisherPath) -d $(TempPackageDir) -f $(PublishFeed)" />
 
   </Target>
 </Project>
