@@ -10,11 +10,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options.Infrastructure;
 
 namespace Microsoft.AspNetCore
 {
-    internal class KestrelServerOptionsSetup : IConfigureOptions<KestrelServerOptions>
+    internal class KestrelServerOptionsSetup : ConfigureDefaultOptions<KestrelServerOptions>
     {
         private const string DefaultCertificateSubjectName = "CN=localhost";
         private const string DevelopmentSSLCertificateName = "localhost";
@@ -33,7 +33,7 @@ namespace Microsoft.AspNetCore
             _loggerFactory = loggerFactory;
         }
 
-        public void Configure(KestrelServerOptions options)
+        public override void Configure(string name, KestrelServerOptions options)
         {
             BindConfiguration(options);
         }
@@ -42,7 +42,7 @@ namespace Microsoft.AspNetCore
         {
             var certificateLoader = new CertificateLoader(_configurationRoot.GetSection("Certificates"), _loggerFactory, _hostingEnvironment.EnvironmentName);
 
-            foreach (var endPoint in _configurationRoot.GetSection("Kestrel:EndPoints").GetChildren())
+            foreach (var endPoint in _configurationRoot.GetSection("Microsoft:AspNetCore:Hosting:Kestrel:EndPoints").GetChildren())
             {
                 BindEndPoint(options, endPoint, certificateLoader);
             }
