@@ -11,8 +11,7 @@ Error if PublishWithAspNetCoreTargetManifest is set to true for standalone app
 -->
   <Target
     Name="PublishWithAspNetCoreTargetManifest"
-    BeforeTargets="Publish"
-    DependsOnTargets="PrepareForPublish"
+    AfterTargets="PrepareForPublish"
     Condition="'$(PublishWithAspNetCoreTargetManifest)'=='true'" >
 
     <Error
