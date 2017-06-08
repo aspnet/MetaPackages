@@ -42,6 +42,10 @@
     </PrepareDependsOn>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="PackagePublisher" Version="1.0.2-*" />
+  </ItemGroup>
+
   <Target Name="UpdateNuGetConfig">
     <UpdatePackageSource
       NuGetConfigPath="$(RepositoryRoot)NuGet.config"
@@ -251,7 +255,7 @@
     <Copy SourceFiles="$(RepositoryRoot)artifacts\nuGetPackagesArchive.timestamped.lzma;$(RepositoryRoot)artifacts\nuGetPackagesArchive.notimestamp.lzma" DestinationFolder="$(PublishDir)" Condition="'$(PublishDir)' != ''" />
   </Target>
 
-  <Target Name="AddManifestsToNupkg">
+  <Target Name="AddManifestsToNupkg" DependsOnTargets="RunResolvePackageDependencies">
     <Error Text="COHERENCE_DROP_LOCATION is not specified. This requires a path like \\aspnetci\drops\Coherence\{branch}\{build-number}"
         Condition=" '$(COHERENCE_DROP_LOCATION)' == '' " />
 
@@ -270,5 +274,19 @@
     </ItemGroup>
 
     <ZipArchive File="%(MetaPackageNupkg.FullPath)" SourceFiles="@(ArchiveFiles)" WorkingDirectory="@(MetaPackageNupkg->'$(TempDir)%(Filename)')" Overwrite="true" />
+
+    <ItemGroup>
+      <PackagePublisherPath Include="%(PackageDefinitions.ResolvedPath)" Condition="'%(PackageDefinitions.Name)'=='PackagePublisher'" />
+    </ItemGroup>
+
+    <PropertyGroup>
+      <TempPackageDir>$(TempDir)package\</TempPackageDir>
+      <_PackagePublisherPath>@(PackagePublisherPath)\PackagePublisher.exe</_PackagePublisherPath>
+      <PublishFeed>https://dotnet.myget.org/F/aspnetcore-ci-dev/</PublishFeed>
+    </PropertyGroup>
+
+    <Copy SourceFiles="%(MetaPackageNupkg.FullPath)" DestinationFolder="$(TempPackageDir)" />
+    <Exec Command="$(_PackagePublisherPath) -d $(TempPackageDir) -f $(PublishFeed)" />
+
   </Target>
 </Project>
