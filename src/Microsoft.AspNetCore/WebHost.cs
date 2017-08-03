@@ -171,11 +171,6 @@ namespace Microsoft.AspNetCore
                     }
 
                     config.AddEnvironmentVariables();
-
-                    if (args != null)
-                    {
-                        config.AddCommandLine(args);
-                    }
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
@@ -188,6 +183,11 @@ namespace Microsoft.AspNetCore
                 {
                     options.ValidateScopes = context.HostingEnvironment.IsDevelopment();
                 });
+
+            if (args != null)
+            {
+                builder.ConfigureAppConfiguration((context, config) => config.AddCommandLine(args));
+            }
 
             return builder;
         }
