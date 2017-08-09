@@ -296,10 +296,11 @@
     </PropertyGroup>
 
   <ItemGroup>
-      <FallbackArchiveFile Include="$(RepositoryRoot)artifacts\$(TimestampOutputPackageName).lzma"/>
-      <FallbackArchiveFile Include="$(RepositoryRoot)artifacts\$(NoTimestampOutputPackageName).lzma" />
-      <FallbackArchiveFile Include="$(RepositoryRoot)artifacts\$(TimestampOutputPackageName).zip" />
-      <FallbackArchiveFile Include="$(RepositoryRoot)artifacts\$(NoTimestampOutputPackageName).zip" />
+      <FallbackArchiveFile Include="
+        $(RepositoryRoot)artifacts\$(TimestampOutputPackageName).lzma;
+        $(RepositoryRoot)artifacts\$(NoTimestampOutputPackageName).lzma;
+        $(RepositoryRoot)artifacts\$(TimestampOutputPackageName).zip;
+        $(RepositoryRoot)artifacts\$(NoTimestampOutputPackageName).zip" />
     </ItemGroup>
 
     <Copy SourceFiles="@(FallbackArchive)" DestinationFolder="$(PublishDir)" Condition="'$(PublishDir)' != ''" />
