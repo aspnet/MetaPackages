@@ -1,4 +1,5 @@
 <Project>
+
   <Target Name="BuildSiteExtension">
     <Error Text="Please specify fallback archive zip file localtion via FallbackArchive parameter." Condition="'$(FallbackArchive)' == ''"/>
     <Error Text="Please specify runtime cache zip file location localtion via RuntimeCache parameter." Condition="'$(RuntimeCache)' == ''"/>
@@ -19,4 +20,5 @@
       Targets="Pack"
       Properties="DotnetHomeDirectory=$(DotnetHomeDirectory);FallbackArchiveDestination=$(FallbackArchiveDestination);RuntimeCacheDestination=$(RuntimeCacheDestination)" />
   </Target>
-</Project>
+
+<Project>
