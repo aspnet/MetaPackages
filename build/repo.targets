@@ -295,15 +295,14 @@
         <PublishDir Condition="'$(PublishShare)' != ''">$(PublishShare)\fallbackArchives</PublishDir>
     </PropertyGroup>
 
-  <ItemGroup>
-      <FallbackArchiveFile Include="
-        $(RepositoryRoot)artifacts\$(TimestampOutputPackageName).lzma;
-        $(RepositoryRoot)artifacts\$(NoTimestampOutputPackageName).lzma;
-        $(RepositoryRoot)artifacts\$(TimestampOutputPackageName).zip;
-        $(RepositoryRoot)artifacts\$(NoTimestampOutputPackageName).zip" />
-    </ItemGroup>
-
-    <Copy SourceFiles="@(FallbackArchive)" DestinationFolder="$(PublishDir)" Condition="'$(PublishDir)' != ''" />
+    <Copy
+        SourceFiles="
+          $(RepositoryRoot)artifacts\$(TimestampOutputPackageName).lzma;
+          $(RepositoryRoot)artifacts\$(NoTimestampOutputPackageName).lzma;
+          $(RepositoryRoot)artifacts\$(TimestampOutputPackageName).zip;
+          $(RepositoryRoot)artifacts\$(NoTimestampOutputPackageName).zip"
+        DestinationFolder="$(PublishDir)"
+        Condition="'$(PublishDir)' != ''" />
   </Target>
 
   <Target Name="AddManifestsToNupkg">

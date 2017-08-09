@@ -28,19 +28,19 @@
     <Message Text="Collecting package files from $(DotnetHomeDirectory), $(FallbackArchiveDestination), $(RuntimeStoreDestination)" Importance="high" />
 
     <ItemGroup>
-      <_PackageFiles Include="$(DotnetHomeDirectory)\**\*.*" Exclude="$(DotnetHomeDirectory)\sdk\NuGetFallbackFolder\**\*.*;$(DotnetHomeDirectory)\store\**\*.*;$(DotnetHomeDirectory)\additionalDeps\**\*.*">
+      <_PackageFiles Include="$(DotnetHomeDirectory)\**\*.*" Exclude="$(DotnetHomeDirectory)\sdk\NuGetFallbackFolder\**\*.*;$(DotnetHomeDirectory)\store\**\*.*;$(DotnetHomeDirectory)\additionalDeps\**\*.*" Condition="$(DotnetHomeDirectory) != ''">
         <PackagePath>tools\</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(FallbackArchiveDestination)\**\*.*">
+      <_PackageFiles Include="$(FallbackArchiveDestination)\**\*.*" Condition="$(FallbackArchiveDestination) != ''">
         <PackagePath>tools\sdk\NuGetFallbackFolder\</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(RuntimeStoreDestination)\**\*.*">
+      <_PackageFiles Include="$(RuntimeStoreDestination)\**\*.*" Condition="$(RuntimeStoreDestination) != ''">
         <PackagePath>tools\</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
