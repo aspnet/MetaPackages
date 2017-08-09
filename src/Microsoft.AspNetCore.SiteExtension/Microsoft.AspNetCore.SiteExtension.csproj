@@ -25,7 +25,7 @@
 
  <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
 
-    <Message Text="Collecting package files from $(DotnetHomeDirectory), $(FallbackArchiveDestination), $(RuntimeCacheDestination)" Importance="high" />
+    <Message Text="Collecting package files from $(DotnetHomeDirectory), $(FallbackArchiveDestination), $(RuntimeStoreDestination)" Importance="high" />
 
     <ItemGroup>
       <_PackageFiles Include="$(DotnetHomeDirectory)\**\*.*" Exclude="$(DotnetHomeDirectory)\sdk\NuGetFallbackFolder\**\*.*;$(DotnetHomeDirectory)\store\**\*.*;$(DotnetHomeDirectory)\additionalDeps\**\*.*">
@@ -40,7 +40,7 @@
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(RuntimeCacheDestination)\**\*.*">
+      <_PackageFiles Include="$(RuntimeStoreDestination)\**\*.*">
         <PackagePath>tools\</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
