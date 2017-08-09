@@ -21,4 +21,4 @@
       Properties="DotnetHomeDirectory=$(DotnetHomeDirectory);FallbackArchiveDestination=$(FallbackArchiveDestination);RuntimeCacheDestination=$(RuntimeCacheDestination)" />
   </Target>
 
-<Project>
+</Project>
