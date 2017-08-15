@@ -179,8 +179,11 @@ namespace Microsoft.AspNetCore
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
-                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    logging.AddConsole();
+                    var loggingConfig = hostingContext.Configuration.GetSection("Logging");
+                    logging.AddConfiguration(loggingConfig);
+                    logging.AddConsole(options =>
+                        options.IncludeScopes = loggingConfig.GetValue<bool>("IncludeScopes", false)
+                    );
                     logging.AddDebug();
                 })
                 .UseIISIntegration()
