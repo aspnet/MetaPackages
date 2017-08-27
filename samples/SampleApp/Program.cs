@@ -22,6 +22,8 @@ namespace SampleApp
             CustomRouter();
 
             CustomApplicationBuilder();
+            
+            CustomMiddlewareDelegate();
 
             StartupClass(args);
         }
@@ -65,7 +67,7 @@ namespace SampleApp
 
         private static void CustomApplicationBuilder()
         {
-            // Using a application builder
+            // Using an application builder
             using (var host = WebHost.StartWith(app =>
             {
                 app.UseStaticFiles();
@@ -77,6 +79,24 @@ namespace SampleApp
             {
                 host.WaitForShutdown();
                 Console.WriteLine("Running CustomApplicationBuilder: Press any key to shutdown and start the next sample...");
+                Console.ReadKey();
+            }
+        }
+        
+        private static void CustomMiddlewareDelegate()
+        {
+            // Using a middleware delegate
+            using (var host = WebHost.StartWith(app => 
+                app.Use(next => 
+                {
+                    return async context => 
+                    {
+                        await context.Response.WriteAsync("Hello World!");
+                    };
+                })))
+            {
+                host.WaitForShutdown();
+                Console.WriteLine("Running CustomMiddlewareDelegate: Press any key to shutdown and start the next sample...");
                 Console.ReadKey();
             }
         }
