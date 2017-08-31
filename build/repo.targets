@@ -831,12 +831,12 @@
     <!-- Create layout: Update debian_config.json -->
     <Exec Command="sed -i
       -e 's/DOTNET_RUNTIME_VERSION/$(SharedFrameworkVersion)/'
-      -e 's/ASPNETCORE_STORE_VERSION/$(TimestampVersion)/'
+      -e 's/ASPNETCORE_STORE_VERSION/2.0.0/'
       $(HostingBundleInstallerLayoutTimestampDirectory)debian_config.json" />
 
     <Exec Command="sed -i
       -e 's/DOTNET_RUNTIME_VERSION/$(SharedFrameworkVersion)/'
-      -e 's/ASPNETCORE_STORE_VERSION/$(NoTimestampVersion)/'
+      -e 's/ASPNETCORE_STORE_VERSION/2.0.0/'
       $(HostingBundleInstallerLayoutNoTimestampDirectory)debian_config.json" />
 
     <MSBuild
