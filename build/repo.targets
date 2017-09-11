@@ -857,12 +857,12 @@
       Properties="InstallerPlatform=ubuntu.16.04;
         SharedFrameworkVersion=$(SharedFrameworkVersion);
         BuildNumber=$(BuildNumber)" />
-    <!-- <MSBuild
+    <MSBuild
       Projects="$(ProjectPath)"
       Targets="BuildStoreAndHostingDeb"
       Properties="InstallerPlatform=ubuntu.16.10;
         SharedFrameworkVersion=$(SharedFrameworkVersion);
-        BuildNumber=$(BuildNumber)" /> -->
+        BuildNumber=$(BuildNumber)" />
   </Target>
 
   <Target Name="BuildStoreAndHostingDeb">
@@ -903,10 +903,6 @@
         $(DockerRootDirectory).build/dotnet/dotnet-install.sh
           --channel preview
           --version $(CLIVersionNumber) &amp;&amp;
-        $(DockerRootDirectory).build/dotnet/dotnet-install.sh
-          --shared-runtime
-          --channel preview
-          --version 1.0.5 &amp;&amp;
         export PATH=$PATH:/home/code_executor/.dotnet &amp;&amp;
         ./build.sh /t:RunDebTool
       &quot;"
