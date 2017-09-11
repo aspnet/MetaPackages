@@ -857,12 +857,12 @@
       Properties="InstallerPlatform=ubuntu.16.04;
         SharedFrameworkVersion=$(SharedFrameworkVersion);
         BuildNumber=$(BuildNumber)" />
-    <MSBuild
+    <!-- <MSBuild
       Projects="$(ProjectPath)"
       Targets="BuildStoreAndHostingDeb"
       Properties="InstallerPlatform=ubuntu.16.10;
         SharedFrameworkVersion=$(SharedFrameworkVersion);
-        BuildNumber=$(BuildNumber)" />
+        BuildNumber=$(BuildNumber)" /> -->
   </Target>
 
   <Target Name="BuildStoreAndHostingDeb">
