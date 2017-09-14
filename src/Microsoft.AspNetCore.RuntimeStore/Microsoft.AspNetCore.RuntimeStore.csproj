@@ -7,6 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-   <PackageReference Include="Build.RuntimeStore.References" Version="$(AspNetCoreVersion)" />
+   <PackageReference Include="Build.RuntimeStore.References" Version="$(AspNetCoreVersion)-$(VersionSuffix)" />
   </ItemGroup>
 </Project>
