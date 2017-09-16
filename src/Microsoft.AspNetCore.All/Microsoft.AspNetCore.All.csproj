@@ -3,7 +3,7 @@
   <Import Project="..\..\build\common.props" />
 
   <PropertyGroup>
-    <VersionPrefix>2.0.1</VersionPrefix>
+    <VersionPrefix Condition="'$(MetapackageVersionPrefix)' != ''">$(MetapackageVersionPrefix)</VersionPrefix>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <PackageTags>aspnetcore</PackageTags>
