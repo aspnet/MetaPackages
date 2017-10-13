@@ -31,7 +31,6 @@ project.lock.json
 .testPublish/
 global.json
 *.g.targets
-korebuild-lock.txt
 
 # Dependencies from pre-requisite builds
 .deps/
