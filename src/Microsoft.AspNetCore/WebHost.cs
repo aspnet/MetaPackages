@@ -178,9 +178,15 @@ namespace Microsoft.AspNetCore
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {
+                    var env = hostingContext.HostingEnvironment;
+                    
                     logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
-                    logging.AddConsole();
-                    logging.AddDebug();
+                    
+                    if (env.IsDevelopment())
+                    {
+                        logging.AddConsole();
+                        logging.AddDebug();
+                    }
                 })
                 .ConfigureServices((hostingContext, services) =>
                 {
