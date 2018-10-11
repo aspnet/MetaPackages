@@ -3,35 +3,35 @@
     <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
   </PropertyGroup>
   <PropertyGroup Label="Package Versions">
-    <InternalAspNetCoreSdkPackageVersion>2.2.0-preview2-20181004.6</InternalAspNetCoreSdkPackageVersion>
-    <MicrosoftAspNetCoreAspNetCoreModulePackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreAspNetCoreModulePackageVersion>
-    <MicrosoftAspNetCoreAspNetCoreModuleV2PackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreAspNetCoreModuleV2PackageVersion>
-    <MicrosoftAspNetCoreDiagnosticsPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreDiagnosticsPackageVersion>
-    <MicrosoftAspNetCoreHostFilteringPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreHostFilteringPackageVersion>
-    <MicrosoftAspNetCoreHostingPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreHostingPackageVersion>
-    <MicrosoftAspNetCoreRoutingPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreRoutingPackageVersion>
-    <MicrosoftAspNetCoreServerIISIntegrationPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreServerIISIntegrationPackageVersion>
-    <MicrosoftAspNetCoreServerIISPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreServerIISPackageVersion>
-    <MicrosoftAspNetCoreServerIntegrationTestingIISPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreServerIntegrationTestingIISPackageVersion>
-    <MicrosoftAspNetCoreServerIntegrationTestingPackageVersion>0.6.0-preview3-35425</MicrosoftAspNetCoreServerIntegrationTestingPackageVersion>
-    <MicrosoftAspNetCoreServerKestrelHttpsPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreServerKestrelHttpsPackageVersion>
-    <MicrosoftAspNetCoreServerKestrelPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreServerKestrelPackageVersion>
-    <MicrosoftAspNetCoreStaticFilesPackageVersion>2.2.0-preview3-35425</MicrosoftAspNetCoreStaticFilesPackageVersion>
-    <MicrosoftExtensionsConfigurationCommandLinePackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsConfigurationCommandLinePackageVersion>
-    <MicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>
-    <MicrosoftExtensionsConfigurationFileExtensionsPackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsConfigurationFileExtensionsPackageVersion>
-    <MicrosoftExtensionsConfigurationJsonPackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsConfigurationJsonPackageVersion>
-    <MicrosoftExtensionsConfigurationUserSecretsPackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsConfigurationUserSecretsPackageVersion>
-    <MicrosoftExtensionsLoggingConfigurationPackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsLoggingConfigurationPackageVersion>
-    <MicrosoftExtensionsLoggingConsolePackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsLoggingConsolePackageVersion>
-    <MicrosoftExtensionsLoggingDebugPackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsLoggingDebugPackageVersion>
-    <MicrosoftExtensionsLoggingEventSourcePackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsLoggingEventSourcePackageVersion>
-    <MicrosoftExtensionsLoggingPackageVersion>2.2.0-preview3-35425</MicrosoftExtensionsLoggingPackageVersion>
+    <InternalAspNetCoreSdkPackageVersion>2.2.0-preview2-20181011.2</InternalAspNetCoreSdkPackageVersion>
+    <MicrosoftAspNetCoreAspNetCoreModulePackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreAspNetCoreModulePackageVersion>
+    <MicrosoftAspNetCoreAspNetCoreModuleV2PackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreAspNetCoreModuleV2PackageVersion>
+    <MicrosoftAspNetCoreDiagnosticsPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreDiagnosticsPackageVersion>
+    <MicrosoftAspNetCoreHostFilteringPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreHostFilteringPackageVersion>
+    <MicrosoftAspNetCoreHostingPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreHostingPackageVersion>
+    <MicrosoftAspNetCoreRoutingPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreRoutingPackageVersion>
+    <MicrosoftAspNetCoreServerIISIntegrationPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreServerIISIntegrationPackageVersion>
+    <MicrosoftAspNetCoreServerIISPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreServerIISPackageVersion>
+    <MicrosoftAspNetCoreServerIntegrationTestingIISPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreServerIntegrationTestingIISPackageVersion>
+    <MicrosoftAspNetCoreServerIntegrationTestingPackageVersion>0.6.0-preview3-35457</MicrosoftAspNetCoreServerIntegrationTestingPackageVersion>
+    <MicrosoftAspNetCoreServerKestrelHttpsPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreServerKestrelHttpsPackageVersion>
+    <MicrosoftAspNetCoreServerKestrelPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreServerKestrelPackageVersion>
+    <MicrosoftAspNetCoreStaticFilesPackageVersion>2.2.0-preview3-35457</MicrosoftAspNetCoreStaticFilesPackageVersion>
+    <MicrosoftExtensionsConfigurationCommandLinePackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsConfigurationCommandLinePackageVersion>
+    <MicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsConfigurationEnvironmentVariablesPackageVersion>
+    <MicrosoftExtensionsConfigurationFileExtensionsPackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsConfigurationFileExtensionsPackageVersion>
+    <MicrosoftExtensionsConfigurationJsonPackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsConfigurationJsonPackageVersion>
+    <MicrosoftExtensionsConfigurationUserSecretsPackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsConfigurationUserSecretsPackageVersion>
+    <MicrosoftExtensionsLoggingConfigurationPackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsLoggingConfigurationPackageVersion>
+    <MicrosoftExtensionsLoggingConsolePackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsLoggingConsolePackageVersion>
+    <MicrosoftExtensionsLoggingDebugPackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsLoggingDebugPackageVersion>
+    <MicrosoftExtensionsLoggingEventSourcePackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsLoggingEventSourcePackageVersion>
+    <MicrosoftExtensionsLoggingPackageVersion>2.2.0-preview3-35457</MicrosoftExtensionsLoggingPackageVersion>
     <MicrosoftNETCoreApp20PackageVersion>2.0.9</MicrosoftNETCoreApp20PackageVersion>
     <MicrosoftNETCoreApp21PackageVersion>2.1.3</MicrosoftNETCoreApp21PackageVersion>
-    <MicrosoftNETCoreApp22PackageVersion>2.2.0-preview3-27001-02</MicrosoftNETCoreApp22PackageVersion>
+    <MicrosoftNETCoreApp22PackageVersion>2.2.0-preview3-27008-03</MicrosoftNETCoreApp22PackageVersion>
     <MicrosoftNETTestSdkPackageVersion>15.6.1</MicrosoftNETTestSdkPackageVersion>
-    <MoqPackageVersion>4.7.49</MoqPackageVersion>
+    <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <NETStandardLibrary20PackageVersion>2.0.3</NETStandardLibrary20PackageVersion>
     <XunitPackageVersion>2.3.1</XunitPackageVersion>
     <XunitRunnerVisualStudioPackageVersion>2.4.0</XunitRunnerVisualStudioPackageVersion>
